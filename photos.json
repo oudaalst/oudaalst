@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Old Amsterdam Street",
+    "lat": 52.3728,
+    "lng": 4.8936,
+    "image": "photos/amsterdam1.jpg",
+    "description": "Amsterdam, circa 1930"
+  },
+  {
+    "title": "London Market",
+    "lat": 51.5072,
+    "lng": -0.1276,
+    "image": "photos/london1.jpg",
+    "description": "London, 1925"
+  }
+]
