@@ -1,18 +1,19 @@
 [
   {
     "title": "Oude kerkje Aalst, Jan de Beijer, 1738",
-    "lat": 51.3964645,
+    "lat": 51.3963821268539,
     "lng": 5.4739738,
-    "image": "photos/1738_oude_kerk_JdB.jpg",
+    "image": "photos/1738_oude_kerk_JdB",
     "description": "Schilderij van Jan de Beijer, 1738, oude kerkje van Aalst"
   },
   {
     "title": "Oude kerkje Aalst, K.F. Bendorp, 1793",
     "lat": 51.3964645,
-    "lng": 5.4739738,
-    "image": "photos/1793_oude_kerk_KFB.jpg",
+    "lng": 5.473997329871212,
+    "image": "photos/1793_oude_kerk_KFB",
     "description": "Kopergrave van K.B. Bendorp, 1793, oude kerkje van Aalst"
   }
 ]
+
 
 
