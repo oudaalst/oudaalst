@@ -1,17 +1,18 @@
 [
   {
-    "title": "Old Amsterdam Street",
-    "lat": 51.2347,
-    "lng": 5.28264,
-    "image": "photos/amsterdam1.jpg",
-    "description": "Aalst, oude kerkje"
+    "title": "Oude kerkje Aalst, Jan de Beijer, 1738",
+    "lat": 51.3964645,
+    "lng": 5.4739738,
+    "image": "photos/1738_oude_kerk_JdB.jpg",
+    "description": "Schilderij van Jan de Beijer, 1738, oude kerkje van Aalst"
   },
   {
-    "title": "London Market",
-    "lat": 51.5072,
-    "lng": -0.1276,
-    "image": "photos/london1.jpg",
-    "description": "London, 1925"
+    "title": "Oude kerkje Aalst, K.F. Bendorp, 1793",
+    "lat": 51.3964645,
+    "lng": 5.4739738,
+    "image": "photos/1793_oude_kerk_KFB.jpg",
+    "description": "Kopergrave van K.B. Bendorp, 1793, oude kerkje van Aalst"
   }
 ]
+
 
