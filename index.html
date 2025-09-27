@@ -78,40 +78,30 @@
       cursor: not-allowed;
     }
 
-    /* Top buttons overlayed on map */
+    /* Top-left buttons overlayed on map */
     .map-top-buttons {
       position: absolute;
       top: 10px;
-      right: 10px;
+      left: 10px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      pointer-events: none;
+      pointer-events: auto;
       z-index: 1000;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-      animation-delay: 0.8s;
     }
     .map-top-buttons button {
-      pointer-events: auto;
       padding: 8px 12px;
       font-size: 14px;
       border: none;
       border-radius: 5px;
-      background-color: rgba(0, 119, 204, 0.7);
+      background-color: rgba(0,0,0,0.8);
       color: white;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
     }
     .map-top-buttons button:hover {
-      background-color: rgba(0, 119, 204, 1);
+      background-color: rgba(0,0,0,1);
       transform: scale(1.05);
-    }
-
-    /* Fade-in animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -123,7 +113,7 @@
       <button id="next">&#10095;</button>
     </div>
 
-    <!-- Top buttons on map -->
+    <!-- Top-left buttons on map -->
     <div class="map-top-buttons">
       <button id="overview">Map Overview</button>
       <button id="start">Back to Beginning</button>
