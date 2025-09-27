@@ -12,18 +12,17 @@
       display: flex;
       font-family: Arial, sans-serif;
     }
+    #map {
+      width: 70%;
+      height: 100%;
+    }
     #sidebar {
       width: 30%;
       height: 100%;
       overflow-y: auto;
       padding: 1rem;
       background: #f7f7f7;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    }
-    #map {
-      flex: 1;
-      height: 100%;
-      width: 70%; /* ensures map fills container */
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* shadow on left side */
     }
     .slide {
       display: none;
@@ -59,6 +58,7 @@
   </style>
 </head>
 <body>
+  <div id="map"></div>
   <div id="sidebar">
     <div id="slides"></div>
     <div class="nav">
@@ -66,11 +66,10 @@
       <button id="next">Next</button>
     </div>
   </div>
-  <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    let currentSlide = -1; // start with no active slide
+    let currentSlide = 0; // start at intro slide
     let slides = [];
     let map, markers = [];
 
@@ -89,7 +88,16 @@
       .then(data => {
         slides = data;
         renderSlides();
-        updateNav(); // buttons correct on load
+
+        // Add all markers right away
+        slides.forEach((p, i) => {
+          const marker = L.marker([p.lat, p.lng]).addTo(map);
+          marker.bindPopup(p.title);
+          markers[i] = marker;
+        });
+
+        // Show intro slide only (no map movement yet)
+        showSlide(0, false);
       });
 
     function renderSlides() {
@@ -103,25 +111,21 @@
       `).join('');
     }
 
-    function showSlide(index) {
+    function showSlide(index, moveMap = true) {
       if (index < 0 || index >= slides.length) return;
 
       // Hide previous slide
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       document.getElementById(`slide-${index}`).classList.add('active');
 
-      // Fly map to new location
-      const { lat, lng } = slides[index];
-      map.flyTo([lat, lng], 16, { duration: 2 });
+      // Move map unless it's the intro slide
+      if (moveMap && index > 0) {
+        const { lat, lng } = slides[index];
+        map.flyTo([lat, lng], 16, { duration: 2 });
 
-      // Add marker if missing
-      if (!markers[index]) {
-        markers[index] = L.marker([lat, lng]).addTo(map);
-        markers[index].bindPopup(slides[index].title);
+        // Open popup after animation
+        setTimeout(() => markers[index].openPopup(), 2000);
       }
-
-      // Open popup after animation
-      setTimeout(() => markers[index].openPopup(), 2000);
 
       currentSlide = index;
       updateNav();
