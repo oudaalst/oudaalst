@@ -78,14 +78,13 @@
       cursor: not-allowed;
     }
 
-    /* Top-left buttons overlayed on map */
+    /* Top-left buttons overlayed on map, side by side */
     .map-top-buttons {
       position: absolute;
       top: 10px;
       left: 10px;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      flex-direction: row;
       pointer-events: auto;
       z-index: 1000;
     }
@@ -93,11 +92,19 @@
       padding: 8px 12px;
       font-size: 14px;
       border: none;
-      border-radius: 5px;
+      border-radius: 5px 5px 5px 5px; /* rounded corners */
       background-color: rgba(0,0,0,0.8);
       color: white;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
+    }
+    .map-top-buttons button:first-child {
+      border-radius: 5px 0 0 5px; /* left button rounded left side only */
+      margin-right: 0; /* attached */
+    }
+    .map-top-buttons button:last-child {
+      border-radius: 0 5px 5px 0; /* right button rounded right side only */
+      margin-left: 0; /* attached */
     }
     .map-top-buttons button:hover {
       background-color: rgba(0,0,0,1);
@@ -132,7 +139,7 @@
     let map;
 
     // Initialize map
-    map = L.map('map').setView([51.3968, 5.4745], 15);
+    map = L.map('map', { zoomControl: false }).setView([51.3968, 5.4745], 15); // disable zoom buttons
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
