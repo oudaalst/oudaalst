@@ -8,6 +8,7 @@
     body, html {
       margin: 0;
       height: 100%;
+      width: 100%;
       display: flex;
       font-family: Arial, sans-serif;
     }
@@ -22,6 +23,7 @@
     #map {
       flex: 1;
       height: 100%;
+      width: 70%; /* ensures map fills container */
     }
     .slide {
       display: none;
@@ -68,7 +70,7 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    let currentSlide = 0;
+    let currentSlide = -1; // start with no active slide
     let slides = [];
     let map, markers = [];
 
@@ -78,13 +80,16 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // Fix initial sizing issue
+    setTimeout(() => { map.invalidateSize(); }, 200);
+
     // Load slides from JSON
     fetch('photos.json')
       .then(res => res.json())
       .then(data => {
         slides = data;
         renderSlides();
-        showSlide(0);
+        updateNav(); // buttons correct on load
       });
 
     function renderSlides() {
@@ -101,7 +106,7 @@
     function showSlide(index) {
       if (index < 0 || index >= slides.length) return;
 
-      // Highlight active slide
+      // Hide previous slide
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       document.getElementById(`slide-${index}`).classList.add('active');
 
@@ -123,12 +128,21 @@
     }
 
     function updateNav() {
-      document.getElementById('prev').disabled = (currentSlide === 0);
-      document.getElementById('next').disabled = (currentSlide === slides.length - 1);
+      document.getElementById('prev').disabled = (currentSlide <= 0);
+      document.getElementById('next').disabled = (slides.length === 0 || currentSlide === slides.length - 1);
     }
 
-    document.getElementById('next').onclick = () => showSlide(currentSlide + 1);
-    document.getElementById('prev').onclick = () => showSlide(currentSlide - 1);
+    document.getElementById('next').onclick = () => {
+      if (currentSlide < slides.length - 1) {
+        showSlide(currentSlide + 1);
+      }
+    };
+
+    document.getElementById('prev').onclick = () => {
+      if (currentSlide > 0) {
+        showSlide(currentSlide - 1);
+      }
+    };
   </script>
 </body>
 </html>
