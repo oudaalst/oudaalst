@@ -14,13 +14,13 @@
     }
 
     #map {
-      width: 70%;
+      width: 50%;
       height: 100%;
       position: relative;
     }
 
     #sidebar {
-      width: 30%;
+      width: 50%;
       height: 100%;
       overflow-y: auto;
       padding: 1rem;
@@ -55,8 +55,7 @@
       transform: translateY(-50%);
       pointer-events: none;
       z-index: 1000;
-      opacity: 1;
-      transition: opacity 0.5s;
+      opacity: 1; /* always visible */
     }
     .map-nav button {
       pointer-events: auto;
@@ -119,7 +118,7 @@
 <body>
   <div id="map">
     <!-- Navigation arrows -->
-    <div class="map-nav" id="map-nav">
+    <div class="map-nav">
       <button id="prev">&#10094;</button>
       <button id="next">&#10095;</button>
     </div>
@@ -224,23 +223,6 @@
       if (e.key === 'ArrowRight') document.getElementById('next').click();
       if (e.key === 'ArrowLeft') document.getElementById('prev').click();
     });
-
-    // Fade out arrows when idle
-    const mapNav = document.getElementById('map-nav');
-    let fadeTimeout;
-
-    function showArrows() {
-      mapNav.style.opacity = '1';
-      clearTimeout(fadeTimeout);
-      fadeTimeout = setTimeout(() => { mapNav.style.opacity = '0'; }, 3000);
-    }
-
-    // Show arrows on mouse move over map
-    map.getContainer().addEventListener('mousemove', showArrows);
-    map.getContainer().addEventListener('mouseenter', showArrows);
-
-    // Initially show arrows
-    showArrows();
   </script>
 </body>
 </html>
