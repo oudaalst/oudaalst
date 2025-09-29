@@ -9,25 +9,32 @@
       margin: 0;
       height: 100%;
       width: 100%;
-      display: flex;
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
 
+    /* Fullscreen map in background */
     #map {
-      width: 50%;
+      position: absolute;
+      top: 0;
+      left: 0;
       height: 100%;
-      position: relative;
+      width: 100%;
+      z-index: 1;
     }
 
-    #sidebar {
-      width: 50%;
+    /* Floating overlay like StoryMapJS */
+    #slide-overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40%; /* adjust width of panel */
       height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
       overflow-y: auto;
       padding: 1rem;
-      background: #f7f7f7;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
+      z-index: 2000;
     }
 
     .slide {
@@ -40,17 +47,15 @@
       opacity: 1;
     }
 
-    /* Trimmed images with text space below */
     .slide img {
       max-width: 100%;
-      max-height: 50vh;   /* image never taller than half the viewport */
-      object-fit: cover;  /* trims edges instead of squishing */
+      max-height: 50vh;
+      object-fit: cover;
       border-radius: 8px;
       margin-bottom: 0.5rem;
-      display: block;
     }
 
-    /* Map navigation arrows overlayed */
+    /* Map navigation arrows */
     .map-nav {
       position: absolute;
       top: 50%;
@@ -59,8 +64,7 @@
       justify-content: space-between;
       transform: translateY(-50%);
       pointer-events: none;
-      z-index: 1000;
-      opacity: 1;
+      z-index: 1500;
     }
     .map-nav button {
       pointer-events: auto;
@@ -83,7 +87,7 @@
       cursor: not-allowed;
     }
 
-    /* Top-left buttons overlayed on map, side by side */
+    /* Top-left buttons */
     .map-top-buttons {
       position: absolute;
       top: 10px;
@@ -91,7 +95,7 @@
       display: flex;
       flex-direction: row;
       pointer-events: auto;
-      z-index: 1000;
+      z-index: 1500;
     }
     .map-top-buttons button {
       padding: 8px 12px;
@@ -115,6 +119,7 @@
   </style>
 </head>
 <body>
+  <!-- Fullscreen map -->
   <div id="map">
     <!-- Navigation arrows -->
     <div class="map-nav">
@@ -122,14 +127,15 @@
       <button id="next">&#10095;</button>
     </div>
 
-    <!-- Top-left buttons on map -->
+    <!-- Top-left buttons -->
     <div class="map-top-buttons">
       <button id="overview">Map Overview</button>
       <button id="start">Back to Beginning</button>
     </div>
   </div>
 
-  <div id="sidebar">
+  <!-- Floating slide overlay -->
+  <div id="slide-overlay">
     <div id="slides"></div>
   </div>
 
@@ -147,20 +153,21 @@
     }).addTo(map);
     setTimeout(() => { map.invalidateSize(); }, 200);
 
+    // Load photo data
     fetch('photos.json')
       .then(res => res.json())
       .then(data => {
         slides = data;
         renderSlides();
 
-        // Add all markers immediately
+        // Add markers
         slides.forEach((p, i) => {
           const marker = L.marker([p.lat, p.lng]).addTo(map);
           marker.bindPopup(p.title);
           markers[i] = marker;
         });
 
-        // Show intro slide (index 0) without moving map
+        // Show intro slide (index 0)
         showSlide(0, false);
       });
 
