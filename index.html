@@ -28,9 +28,9 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 40%; /* adjust width of panel */
+      width: 40%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.85); /* lighter for more map visibility */
       box-shadow: -2px 0 10px rgba(0,0,0,0.2);
       overflow-y: auto;
       padding: 1rem;
@@ -53,6 +53,23 @@
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 0.5rem;
+    }
+
+    /* Explore button under intro text */
+    .explore-btn {
+      margin-top: 1rem;
+      padding: 10px 16px;
+      font-size: 14px;
+      border: none;
+      background-color: rgba(0,0,0,0.8);
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .explore-btn:hover {
+      background-color: rgba(0,0,0,1);
+      transform: scale(1.05);
     }
 
     /* Map navigation arrows */
@@ -116,6 +133,25 @@
       background-color: rgba(0,0,0,1);
       transform: scale(1.05);
     }
+
+    /* Right-side start arrow */
+    .start-arrow {
+      position: absolute;
+      top: 50%;
+      right: -30px; /* stick out from overlay */
+      transform: translateY(-50%);
+      font-size: 32px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 3000;
+      display: none;
+    }
+    .start-arrow:hover {
+      background: rgba(0,0,0,0.9);
+    }
   </style>
 </head>
 <body>
@@ -137,6 +173,7 @@
   <!-- Floating slide overlay -->
   <div id="slide-overlay">
     <div id="slides"></div>
+    <div class="start-arrow" id="start-arrow">&#10095;</div>
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -178,6 +215,7 @@
           <h2>${p.title}</h2>
           <img src="${p.image}" alt="${p.title}" />
           <p>${p.description}</p>
+          ${i === 0 ? '<button class="explore-btn" id="explore">Verken foto’s</button>' : ''}
         </div>
       `).join('');
     }
@@ -187,6 +225,9 @@
 
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       document.getElementById(`slide-${index}`).classList.add('active');
+
+      // show arrow only on intro
+      document.getElementById('start-arrow').style.display = (index === 0 ? 'block' : 'none');
 
       if (moveMap && index > 0) {
         const { lat, lng } = slides[index];
@@ -223,6 +264,23 @@
     document.getElementById('start').onclick = () => {
       showSlide(0, false);
     };
+
+    // Start arrow
+    document.getElementById('start-arrow').onclick = () => {
+      if (slides.length > 1) showSlide(1);
+    };
+
+    // Explore button under intro text
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'explore') {
+        if (slides.length > 1) {
+          showSlide(1); // go to first photo
+          const { lat, lng } = slides[1];
+          map.flyTo([lat, lng], 16, { duration: 2 });
+          setTimeout(() => markers[1].openPopup(), 2000);
+        }
+      }
+    });
 
     // Keyboard support
     document.addEventListener('keydown', (e) => {
