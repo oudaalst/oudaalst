@@ -13,7 +13,6 @@
       overflow: hidden;
     }
 
-    /* Fullscreen map in background */
     #map {
       position: absolute;
       top: 0;
@@ -23,7 +22,6 @@
       z-index: 1;
     }
 
-    /* Floating overlay like StoryMapJS */
     #slide-overlay {
       position: absolute;
       top: 0;
@@ -55,7 +53,6 @@
       margin-bottom: 0.5rem;
     }
 
-    /* Explore button */
     .explore-btn {
       margin-top: 1rem;
       padding: 10px 16px;
@@ -72,7 +69,6 @@
       transform: scale(1.05);
     }
 
-    /* Map navigation arrows */
     .map-nav {
       position: absolute;
       top: 50%;
@@ -104,7 +100,6 @@
       cursor: not-allowed;
     }
 
-    /* Top-left buttons */
     .map-top-buttons {
       position: absolute;
       top: 10px;
@@ -134,7 +129,6 @@
       transform: scale(1.05);
     }
 
-    /* Right-side start arrow */
     .start-arrow {
       position: absolute;
       top: 50%;
@@ -155,22 +149,17 @@
   </style>
 </head>
 <body>
-  <!-- Fullscreen map -->
   <div id="map">
-    <!-- Navigation arrows -->
     <div class="map-nav">
       <button id="prev">&#10094;</button>
       <button id="next">&#10095;</button>
     </div>
-
-    <!-- Top-left buttons -->
     <div class="map-top-buttons">
       <button id="overview">Map Overview</button>
       <button id="start">Back to Beginning</button>
     </div>
   </div>
 
-  <!-- Floating slide overlay -->
   <div id="slide-overlay">
     <div id="slides"></div>
     <div class="start-arrow" id="start-arrow">&#10095;</div>
@@ -192,7 +181,6 @@
       shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
       shadowSize: [41, 41]
     });
-
     const activeIcon = L.icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
       iconSize: [25, 41],
@@ -252,7 +240,6 @@
 
       document.getElementById('start-arrow').style.display = (index === 0 ? 'block' : 'none');
 
-      // reset all markers
       markers.forEach(m => {
         m.setIcon(defaultIcon);
         m.closePopup();
@@ -260,13 +247,17 @@
 
       if (moveMap && index > 0) {
         const { lat, lng } = slides[index];
-        const targetLatLng = L.latLng(lat, lng);
-        const targetPoint = map.latLngToContainerPoint(targetLatLng);
-        const offsetX = map.getSize().x * 0.25; // shift right for left-half centering
-        const offsetPoint = L.point(targetPoint.x - offsetX, targetPoint.y);
+
+        // Center in left half
+        const mapSize = map.getSize();
+        const leftHalfX = mapSize.x * 0.25; // middle of left half (0.5*0.5)
+        const middleY = mapSize.y / 2;
+
+        const markerPoint = map.latLngToContainerPoint([lat, lng]);
+        const offsetPoint = L.point(markerPoint.x - (markerPoint.x - leftHalfX), markerPoint.y);
         const offsetLatLng = map.containerPointToLatLng(offsetPoint);
 
-        map.flyTo(offsetLatLng, 17, { duration: 2 });
+        map.flyTo(offsetLatLng, 17, { duration: 1.5 });
 
         markers[index].setIcon(activeIcon);
         setTimeout(() => markers[index].openPopup(), 2000);
@@ -308,12 +299,14 @@
         if (slides.length > 1) {
           showSlide(1);
           const { lat, lng } = slides[1];
-          const targetLatLng = L.latLng(lat, lng);
-          const targetPoint = map.latLngToContainerPoint(targetLatLng);
-          const offsetX = map.getSize().x * 0.25;
-          const offsetPoint = L.point(targetPoint.x - offsetX, targetPoint.y);
+          const mapSize = map.getSize();
+          const leftHalfX = mapSize.x * 0.25;
+          const middleY = mapSize.y / 2;
+          const markerPoint = map.latLngToContainerPoint([lat, lng]);
+          const offsetPoint = L.point(markerPoint.x - (markerPoint.x - leftHalfX), markerPoint.y);
           const offsetLatLng = map.containerPointToLatLng(offsetPoint);
-          map.flyTo(offsetLatLng, 17, { duration: 2 });
+
+          map.flyTo(offsetLatLng, 17, { duration: 1.5 });
           markers[1].setIcon(activeIcon);
           setTimeout(() => markers[1].openPopup(), 2000);
         }
