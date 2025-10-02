@@ -49,20 +49,20 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-let currentSlide = 0, slides = [], markers = [], map;
+let currentSlide=0, slides=[], markers=[], map;
 
-const defaultIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconSize: [25,41], iconAnchor:[12,41], popupAnchor:[1,-34],
+const defaultIcon=L.icon({
+  iconUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconSize:[25,41], iconAnchor:[12,41], popupAnchor:[1,-34],
   shadowUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png', shadowSize:[41,41]
 });
-const activeIcon = L.icon({
+const activeIcon=L.icon({
   iconUrl:'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   iconSize:[25,41], iconAnchor:[12,41], popupAnchor:[1,-34],
   shadowUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png', shadowSize:[41,41]
 });
 
-map = L.map('map',{zoomControl:false}).setView([51.397109,5.490245],15);
+map=L.map('map',{zoomControl:false}).setView([51.397109,5.490245],15);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
 setTimeout(()=>map.invalidateSize(),200);
 
@@ -72,11 +72,11 @@ fetch('photos.json')
     slides=data;
     renderSlides();
     slides.forEach((p,i)=>{
-      const marker = L.marker([p.lat,p.lng],{icon:defaultIcon}).addTo(map);
+      const marker=L.marker([p.lat,p.lng],{icon:defaultIcon}).addTo(map);
       marker.bindPopup(p.title);
       marker.bindTooltip(p.title,{permanent:false,direction:'top'});
       marker.on('click',()=>{
-        marker.closeTooltip();       // disappear immediately
+        marker.closeTooltip(); // disappears immediately
         showSlide(i,true);
       });
       markers[i]=marker;
@@ -98,8 +98,9 @@ function renderSlides(){
 
 function flyToLeftHalf(lat,lng,zoom=17){
   const overlayWidth = map.getSize().x*0.4;
-  const offsetLng = map.containerPointToLatLng([overlayWidth/2,0]).lng - map.getCenter().lng;
-  const targetLatLng = [lat, lng - offsetLng];
+  const markerPoint = map.latLngToLayerPoint([lat,lng]);
+  const targetPoint = L.point(markerPoint.x - overlayWidth/2, markerPoint.y);
+  const targetLatLng = map.layerPointToLatLng(targetPoint);
   map.flyTo(targetLatLng,zoom,{duration:1.5});
 }
 
@@ -127,11 +128,11 @@ function updateNav(){
   document.getElementById('next').disabled=slides.length===0||currentSlide>=slides.length-1;
 }
 
-document.getElementById('next').onclick=()=>{ if(currentSlide<slides.length-1) showSlide(currentSlide+1); };
-document.getElementById('prev').onclick=()=>{ if(currentSlide>0) showSlide(currentSlide-1); };
+document.getElementById('next').onclick=()=>{ if(currentSlide<slides.length-1) showSlide(currentSlide+1,true); };
+document.getElementById('prev').onclick=()=>{ if(currentSlide>0) showSlide(currentSlide-1,true); };
 document.getElementById('overview').onclick=()=>{ if(markers.length>0){ const group=L.featureGroup(markers); map.fitBounds(group.getBounds().pad(0.2)); } };
 document.getElementById('start').onclick=()=>{ showSlide(0,false); };
-document.getElementById('start-arrow').onclick=()=>{ if(slides.length>1) showSlide(1); };
+document.getElementById('start-arrow').onclick=()=>{ if(slides.length>1) showSlide(1,true); };
 
 document.addEventListener('click',e=>{
   if(e.target && e.target.id==='explore'){
