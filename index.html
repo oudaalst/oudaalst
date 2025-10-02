@@ -30,7 +30,7 @@
       right: 0;
       width: 40%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.85); /* lighter for more map visibility */
+      background: rgba(255, 255, 255, 0.85);
       box-shadow: -2px 0 10px rgba(0,0,0,0.2);
       overflow-y: auto;
       padding: 1rem;
@@ -55,7 +55,7 @@
       margin-bottom: 0.5rem;
     }
 
-    /* Explore button under intro text */
+    /* Explore button */
     .explore-btn {
       margin-top: 1rem;
       padding: 10px 16px;
@@ -138,7 +138,7 @@
     .start-arrow {
       position: absolute;
       top: 50%;
-      right: -30px; /* stick out from overlay */
+      right: -30px;
       transform: translateY(-50%);
       font-size: 32px;
       background: rgba(0,0,0,0.6);
@@ -183,8 +183,27 @@
     let markers = [];
     let map;
 
+    // Define icons
+    const defaultIcon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+
+    const activeIcon = L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+
     // Initialize map
-    map = L.map('map', { zoomControl: false }).setView([51.3968, 5.4745], 15);
+    map = L.map('map', { zoomControl: false }).setView([51.397109, 5.490245], 15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -199,12 +218,17 @@
 
         // Add markers
         slides.forEach((p, i) => {
-          const marker = L.marker([p.lat, p.lng]).addTo(map);
+          const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
           marker.bindPopup(p.title);
+          marker.bindTooltip(p.title, {permanent: false, direction: 'top'});
+
+          marker.on('click', () => {
+            showSlide(i);
+          });
+
           markers[i] = marker;
         });
 
-        // Show intro slide (index 0)
         showSlide(0, false);
       });
 
@@ -229,9 +253,16 @@
       // show arrow only on intro
       document.getElementById('start-arrow').style.display = (index === 0 ? 'block' : 'none');
 
+      // reset all markers
+      markers.forEach(m => {
+        m.setIcon(defaultIcon);
+        m.closePopup();
+      });
+
       if (moveMap && index > 0) {
         const { lat, lng } = slides[index];
         map.flyTo([lat, lng], 16, { duration: 2 });
+        markers[index].setIcon(activeIcon); // highlight active
         setTimeout(() => markers[index].openPopup(), 2000);
       }
 
@@ -244,7 +275,7 @@
       document.getElementById('next').disabled = slides.length === 0 || currentSlide >= slides.length - 1;
     }
 
-    // Next/Prev arrows
+    // Next/Prev
     document.getElementById('next').onclick = () => {
       if (currentSlide < slides.length - 1) showSlide(currentSlide + 1);
     };
@@ -252,7 +283,7 @@
       if (currentSlide > 0) showSlide(currentSlide - 1);
     };
 
-    // Map Overview button
+    // Map Overview
     document.getElementById('overview').onclick = () => {
       if (markers.length > 0) {
         const group = L.featureGroup(markers);
@@ -260,7 +291,7 @@
       }
     };
 
-    // Back to Beginning button
+    // Back to Beginning
     document.getElementById('start').onclick = () => {
       showSlide(0, false);
     };
@@ -270,13 +301,14 @@
       if (slides.length > 1) showSlide(1);
     };
 
-    // Explore button under intro text
+    // Explore button
     document.addEventListener('click', (e) => {
       if (e.target && e.target.id === 'explore') {
         if (slides.length > 1) {
-          showSlide(1); // go to first photo
+          showSlide(1);
           const { lat, lng } = slides[1];
           map.flyTo([lat, lng], 16, { duration: 2 });
+          markers[1].setIcon(activeIcon);
           setTimeout(() => markers[1].openPopup(), 2000);
         }
       }
