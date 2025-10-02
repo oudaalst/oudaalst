@@ -22,6 +22,7 @@
     #map {
       width: 60%;
       height: 100%;
+      position: relative;
     }
 
     #slide-overlay {
@@ -75,17 +76,38 @@
       background-color: rgba(0,0,0,0.3);
       cursor: not-allowed;
     }
+
+    .back-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1500;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: none;
+      background-color: rgba(0,0,0,0.8);
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .back-button:hover {
+      background-color: rgba(0,0,0,1);
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
   <div id="container">
-    <div id="map"></div>
-    <div id="slide-overlay">
-      <div id="slides"></div>
+    <div id="map">
+      <button class="back-button" id="back-start">Terug naar begin</button>
       <div class="map-nav">
         <button id="prev">&#10094;</button>
         <button id="next">&#10095;</button>
       </div>
+    </div>
+    <div id="slide-overlay">
+      <div id="slides"></div>
     </div>
   </div>
 
@@ -113,7 +135,8 @@
       shadowSize: [41, 41]
     });
 
-    map = L.map('map', { zoomControl: true }).setView([51.397109, 5.490245], 15);
+    // Initialize map at the requested coordinates
+    map = L.map('map', { zoomControl: true }).setView([51.397546, 5.480413], 15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -126,9 +149,11 @@
         renderSlides();
 
         slides.forEach((p, i) => {
+          if (i === 0) return; // skip the first photo marker
+
           const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
           marker.on('click', () => showSlide(i));
-          markers[i] = marker;
+          markers.push(marker);
         });
 
         showSlide(0, false);
@@ -152,9 +177,9 @@
       document.getElementById(`slide-${index}`).classList.add('active');
 
       markers.forEach(m => m.setIcon(defaultIcon));
-      markers[index].setIcon(activeIcon);
+      if (index > 0) markers[index - 1].setIcon(activeIcon); // adjust because first slide has no marker
 
-      if (moveMap) {
+      if (moveMap && index > 0) {
         const { lat, lng } = slides[index];
         map.flyTo([lat, lng], 17, { duration: 1.2 });
       }
@@ -170,6 +195,7 @@
 
     document.getElementById('next').onclick = () => { if (currentSlide < slides.length - 1) showSlide(currentSlide + 1); };
     document.getElementById('prev').onclick = () => { if (currentSlide > 0) showSlide(currentSlide - 1); };
+    document.getElementById('back-start').onclick = () => { showSlide(0, false); };
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') document.getElementById('next').click();
