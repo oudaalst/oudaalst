@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Aalst in oude foto's</title>
+  <title>World Photo Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     body, html {
@@ -80,7 +80,7 @@
     .back-button {
       position: absolute;
       top: 10px;
-      left: 10px;
+      left: 80px; /* moved right so it doesn't overlap zoom buttons */
       z-index: 1500;
       padding: 8px 12px;
       font-size: 14px;
@@ -135,8 +135,10 @@
       shadowSize: [41, 41]
     });
 
-    // Initialize map at the requested coordinates
-    map = L.map('map', { zoomControl: true }).setView([51.397546, 5.480413], 15);
+    const startCoords = [51.397546, 5.480413];
+    const startZoom = 15;
+
+    map = L.map('map', { zoomControl: true }).setView(startCoords, startZoom);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -149,7 +151,7 @@
         renderSlides();
 
         slides.forEach((p, i) => {
-          if (i === 0) return; // skip the first photo marker
+          if (i === 0) return; // skip first photo marker
 
           const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
           marker.on('click', () => showSlide(i));
@@ -177,11 +179,15 @@
       document.getElementById(`slide-${index}`).classList.add('active');
 
       markers.forEach(m => m.setIcon(defaultIcon));
-      if (index > 0) markers[index - 1].setIcon(activeIcon); // adjust because first slide has no marker
+      if (index > 0) markers[index - 1].setIcon(activeIcon);
 
-      if (moveMap && index > 0) {
-        const { lat, lng } = slides[index];
-        map.flyTo([lat, lng], 17, { duration: 1.2 });
+      if (moveMap) {
+        if (index === 0) {
+          map.setView(startCoords, startZoom);
+        } else {
+          const { lat, lng } = slides[index];
+          map.flyTo([lat, lng], 17, { duration: 1.2 });
+        }
       }
 
       currentSlide = index;
@@ -195,7 +201,7 @@
 
     document.getElementById('next').onclick = () => { if (currentSlide < slides.length - 1) showSlide(currentSlide + 1); };
     document.getElementById('prev').onclick = () => { if (currentSlide > 0) showSlide(currentSlide - 1); };
-    document.getElementById('back-start').onclick = () => { showSlide(0, false); };
+    document.getElementById('back-start').onclick = () => { showSlide(0, true); };
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') document.getElementById('next').click();
