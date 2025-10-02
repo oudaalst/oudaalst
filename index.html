@@ -11,6 +11,7 @@
       width: 100%;
       font-family: Arial, sans-serif;
       overflow: hidden;
+      user-select: none; /* prevent text selection */
     }
 
     #container {
@@ -49,6 +50,8 @@
       border-radius: 8px;
       margin-bottom: 0.5rem;
       cursor: pointer;
+      user-drag: none;
+      -webkit-user-drag: none;
     }
 
     .map-nav {
@@ -82,7 +85,7 @@
     .back-button {
       position: absolute;
       top: 10px;
-      left: 80px; /* moved right to not overlap zoom */
+      left: 80px; 
       z-index: 1500;
       padding: 8px 12px;
       font-size: 14px;
@@ -146,6 +149,9 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
+    // Disable right-click everywhere
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
     let currentSlide = 0;
     let slides = [];
     let markers = [];
@@ -222,6 +228,13 @@
         }
       }
 
+      // Update modal image if open
+      const modal = document.getElementById('photo-modal');
+      const modalImg = document.getElementById('modal-img');
+      if (modal.style.display === 'flex') {
+        modalImg.src = slides[index].image;
+      }
+
       currentSlide = index;
       updateNav();
     }
@@ -238,6 +251,10 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') document.getElementById('next').click();
       if (e.key === 'ArrowLeft') document.getElementById('prev').click();
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('photo-modal');
+        if (modal.style.display === 'flex') modal.style.display = 'none';
+      }
     });
 
     // Photo modal functionality
