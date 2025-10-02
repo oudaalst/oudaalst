@@ -203,11 +203,9 @@
 
         slides.forEach((p, i) => {
           const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
-          marker.bindPopup(p.title);
-          marker.bindTooltip(p.title, {permanent: false, direction: 'top'});
 
           marker.on('click', () => {
-            showSlide(i); // tooltip closes automatically
+            showSlide(i); 
           });
 
           markers[i] = marker;
@@ -252,18 +250,13 @@
 
       document.getElementById('start-arrow').style.display = (index === 0 ? 'block' : 'none');
 
-      // Close all tooltips
-      markers.forEach(m => {
-        m.setIcon(defaultIcon);
-        m.closeTooltip();
-        m.closePopup();
-      });
+      // reset icons
+      markers.forEach(m => m.setIcon(defaultIcon));
 
       if (moveMap && index > 0) {
         const { lat, lng } = slides[index];
         flyToLeftHalf(lat, lng, 17);
         markers[index].setIcon(activeIcon);
-        setTimeout(() => markers[index].openPopup(), 2000);
       }
 
       currentSlide = index;
@@ -288,7 +281,6 @@
           const { lat, lng } = slides[1];
           flyToLeftHalf(lat, lng, 17);
           markers[1].setIcon(activeIcon);
-          setTimeout(() => markers[1].openPopup(), 2000);
         }
       }
     });
