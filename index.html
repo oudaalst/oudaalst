@@ -183,7 +183,7 @@
     let markers = [];
     let map;
 
-    // Define icons
+    // Marker icons
     const defaultIcon = L.icon({
       iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
       iconSize: [25, 41],
@@ -216,13 +216,13 @@
         slides = data;
         renderSlides();
 
-        // Add markers
         slides.forEach((p, i) => {
           const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
           marker.bindPopup(p.title);
           marker.bindTooltip(p.title, {permanent: false, direction: 'top'});
 
           marker.on('click', () => {
+            marker.closeTooltip(); // hide hover
             showSlide(i);
           });
 
@@ -250,7 +250,6 @@
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       document.getElementById(`slide-${index}`).classList.add('active');
 
-      // show arrow only on intro
       document.getElementById('start-arrow').style.display = (index === 0 ? 'block' : 'none');
 
       // reset all markers
@@ -261,8 +260,15 @@
 
       if (moveMap && index > 0) {
         const { lat, lng } = slides[index];
-        map.flyTo([lat, lng], 16, { duration: 2 });
-        markers[index].setIcon(activeIcon); // highlight active
+        const targetLatLng = L.latLng(lat, lng);
+        const targetPoint = map.latLngToContainerPoint(targetLatLng);
+        const offsetX = map.getSize().x * 0.25; // shift right for left-half centering
+        const offsetPoint = L.point(targetPoint.x - offsetX, targetPoint.y);
+        const offsetLatLng = map.containerPointToLatLng(offsetPoint);
+
+        map.flyTo(offsetLatLng, 17, { duration: 2 });
+
+        markers[index].setIcon(activeIcon);
         setTimeout(() => markers[index].openPopup(), 2000);
       }
 
@@ -275,7 +281,6 @@
       document.getElementById('next').disabled = slides.length === 0 || currentSlide >= slides.length - 1;
     }
 
-    // Next/Prev
     document.getElementById('next').onclick = () => {
       if (currentSlide < slides.length - 1) showSlide(currentSlide + 1);
     };
@@ -283,7 +288,6 @@
       if (currentSlide > 0) showSlide(currentSlide - 1);
     };
 
-    // Map Overview
     document.getElementById('overview').onclick = () => {
       if (markers.length > 0) {
         const group = L.featureGroup(markers);
@@ -291,30 +295,31 @@
       }
     };
 
-    // Back to Beginning
     document.getElementById('start').onclick = () => {
       showSlide(0, false);
     };
 
-    // Start arrow
     document.getElementById('start-arrow').onclick = () => {
       if (slides.length > 1) showSlide(1);
     };
 
-    // Explore button
     document.addEventListener('click', (e) => {
       if (e.target && e.target.id === 'explore') {
         if (slides.length > 1) {
           showSlide(1);
           const { lat, lng } = slides[1];
-          map.flyTo([lat, lng], 16, { duration: 2 });
+          const targetLatLng = L.latLng(lat, lng);
+          const targetPoint = map.latLngToContainerPoint(targetLatLng);
+          const offsetX = map.getSize().x * 0.25;
+          const offsetPoint = L.point(targetPoint.x - offsetX, targetPoint.y);
+          const offsetLatLng = map.containerPointToLatLng(offsetPoint);
+          map.flyTo(offsetLatLng, 17, { duration: 2 });
           markers[1].setIcon(activeIcon);
           setTimeout(() => markers[1].openPopup(), 2000);
         }
       }
     });
 
-    // Keyboard support
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') document.getElementById('next').click();
       if (e.key === 'ArrowLeft') document.getElementById('prev').click();
