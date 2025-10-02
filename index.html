@@ -210,7 +210,7 @@
           marker.bindTooltip(p.title, {permanent: false, direction: 'top'});
 
           marker.on('click', () => {
-            marker.closeTooltip(); // hide hover
+            marker.closeTooltip(); // hide tooltip
             showSlide(i);
           });
 
@@ -248,16 +248,14 @@
       if (moveMap && index > 0) {
         const { lat, lng } = slides[index];
 
-        // Center in left half
-        const mapSize = map.getSize();
-        const leftHalfX = mapSize.x * 0.25; // middle of left half (0.5*0.5)
-        const middleY = mapSize.y / 2;
+        // Fly to marker with zoom
+        map.flyTo([lat, lng], 17, { duration: 1.5 });
 
-        const markerPoint = map.latLngToContainerPoint([lat, lng]);
-        const offsetPoint = L.point(markerPoint.x - (markerPoint.x - leftHalfX), markerPoint.y);
-        const offsetLatLng = map.containerPointToLatLng(offsetPoint);
-
-        map.flyTo(offsetLatLng, 17, { duration: 1.5 });
+        // Pan horizontally so marker appears centered in left map half
+        const overlayWidth = map.getSize().x * 0.4; // overlay = 40%
+        map.once('moveend', () => {
+          map.panBy([overlayWidth / 2, 0], { animate: true });
+        });
 
         markers[index].setIcon(activeIcon);
         setTimeout(() => markers[index].openPopup(), 2000);
@@ -299,14 +297,9 @@
         if (slides.length > 1) {
           showSlide(1);
           const { lat, lng } = slides[1];
-          const mapSize = map.getSize();
-          const leftHalfX = mapSize.x * 0.25;
-          const middleY = mapSize.y / 2;
-          const markerPoint = map.latLngToContainerPoint([lat, lng]);
-          const offsetPoint = L.point(markerPoint.x - (markerPoint.x - leftHalfX), markerPoint.y);
-          const offsetLatLng = map.containerPointToLatLng(offsetPoint);
-
-          map.flyTo(offsetLatLng, 17, { duration: 1.5 });
+          const overlayWidth = map.getSize().x * 0.4;
+          map.flyTo([lat, lng], 17, { duration: 1.5 });
+          map.once('moveend', () => { map.panBy([overlayWidth / 2, 0], { animate: true }); });
           markers[1].setIcon(activeIcon);
           setTimeout(() => markers[1].openPopup(), 2000);
         }
