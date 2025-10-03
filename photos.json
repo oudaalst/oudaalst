@@ -1,27 +1,27 @@
 [
     {
-    "title": "Oude foto's van het dorp Aalst",
+    "title": "Oude foto's van de dorpen Aalst en Waalre",
     "lat": 51.3968,
     "lng": 5.4745,
     "image": "photos/Postcard-kiosk.jpg",
-    "description": "Oude foto's van het dorp Aalst(nb), met tekst en uitleg en jaartallen"
+    "info": "Website met oude afbeeldingen en foto's van Aalst/Waalre voorzien van wat tekst en uitleg"
   },
   {
-    "title": "Oude kerkje Aalst, Jan de Beijer, 1738",
+    "title": "Oude kerkje Aalst omstreeks 1738",
     "lat": 51.3963821268539,
     "lng": 5.4739738,
     "image": "photos/1738_oude_kerk_JdB.jpg",
     "description": "Schilderij van Jan de Beijer, 1738, oude kerkje van Aalst"
   },
   {
-    "title": "Oude kerkje Aalst, K.F. Bendorp, 1793",
+    "title": "Oude kerkje Aalst omstreeks 1793",
     "lat": 51.3964645,
     "lng": 5.473997329871212,
     "image": "photos/1793_oude_kerk_KFB.jpg",
     "description": "Kopergrave van K.B. Bendorp, 1793, oude kerkje van Aalst"
   },
   {
-    "title": "Kasteel van Waalre, Jacobus Harrewijn, 1705",
+    "title": "Kasteel van Waalre omstreeks 1705",
     "lat": 51.368331,
     "lng": 5.436277,
     "image": "photos/1705_J_Harrewijn_kasteel_waalre.jpg",
