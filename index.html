@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Oude foto's van Aalst en Waalre</title>
+  <title>Oude beelden van Aalst en Waalre</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     body, html {
@@ -206,6 +206,7 @@
           <h2>${p.title}</h2>
           <img src="${p.image}" alt="${p.title}" />
           <p>${p.description}</p>
+          ${p.info ? `<p><em>${p.info}</em></p>` : ""}
         </div>
       `).join('');
     }
