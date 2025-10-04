@@ -11,7 +11,7 @@
       width: 100%;
       font-family: Arial, sans-serif;
       overflow: hidden;
-      user-select: none;
+      user-select: none; /* prevent text selection */
     }
 
     #container {
@@ -125,9 +125,11 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       width: 220px;
-      max-height: 140px; 
+      max-height: 140px; /* about 5 items */
       overflow-y: auto;
       display: none;
+      font-family: Arial, sans-serif; /* same font for all results */
+      font-size: 14px;
     }
     .results-list div {
       padding: 6px 8px;
@@ -192,6 +194,7 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
+    // Disable right-click everywhere
     document.addEventListener('contextmenu', e => e.preventDefault());
 
     let currentSlide = 0;
@@ -232,7 +235,7 @@
         renderSlides();
 
         slides.forEach((p, i) => {
-          if (i === 0) return;
+          if (i === 0) return; // skip first photo marker
           const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
           marker.on('click', () => showSlide(i));
           markers.push(marker);
@@ -244,23 +247,15 @@
     function renderSlides() {
       const slidesContainer = document.getElementById('slides');
       slidesContainer.innerHTML = slides.map((p, i) => {
-        // Handle multiple images under one pin
+        let imagesHTML = "";
         if (p.images) {
-          return `
-          <div class="slide" id="slide-${i}">
-            <h2>${p.title}</h2>
-            ${p.images.map(img => `<img src="${img.image}" alt="${p.title}" /><p>${img.description}</p>`).join('')}
-            ${p.info ? `<p><em>${p.info}</em></p>` : ""}
-          </div>`;
+          p.images.forEach(imgObj => {
+            imagesHTML += `<img src="${imgObj.image}" alt="${p.title}" /><p>${imgObj.description}</p>`;
+          });
         } else {
-          return `
-          <div class="slide" id="slide-${i}">
-            <h2>${p.title}</h2>
-            <img src="${p.image}" alt="${p.title}" />
-            <p>${p.description}</p>
-            ${p.info ? `<p><em>${p.info}</em></p>` : ""}
-          </div>`;
+          imagesHTML = `<img src="${p.image}" alt="${p.title}" /><p>${p.description}</p>`;
         }
+        return `<div class="slide" id="slide-${i}"><h2>${p.title}</h2>${imagesHTML}${p.info ? `<p><em>${p.info}</em></p>` : ""}</div>`;
       }).join('');
     }
 
@@ -285,11 +280,7 @@
       const modal = document.getElementById('photo-modal');
       const modalImg = document.getElementById('modal-img');
       if (modal.style.display === 'flex') {
-        if (slides[index].images) {
-          modalImg.src = slides[index].images[0].image;
-        } else {
-          modalImg.src = slides[index].image;
-        }
+        modalImg.src = slides[index].image || (slides[index].images ? slides[index].images[0].image : "");
       }
 
       currentSlide = index;
@@ -314,6 +305,7 @@
       }
     });
 
+    // Photo modal functionality
     document.addEventListener('click', (e) => {
       if (e.target.tagName === 'IMG' && e.target.closest('.slide')) {
         const modal = document.getElementById('photo-modal');
@@ -326,11 +318,12 @@
     document.getElementById('modal-close').onclick = () => {
       document.getElementById('photo-modal').style.display = 'none';
     };
+
     document.getElementById('photo-modal').onclick = (e) => {
       if (e.target.id === 'photo-modal') e.target.style.display = 'none';
     };
 
-    // Search functionality with highlight and description snippet
+    // Improved Search functionality
     const searchBox = document.getElementById('search-box');
     const resultsList = document.getElementById('results-list');
 
@@ -350,9 +343,12 @@
         } else if (p.description && p.description.toLowerCase().includes(query)) {
           matchIndex = p.description.toLowerCase().indexOf(query);
           field = "description";
+        } else if (p.info && p.info.toLowerCase().includes(query)) {
+          matchIndex = p.info.toLowerCase().indexOf(query);
+          field = "info";
         }
 
-        if (matchIndex >= 0) results.push({i, title: p.title, description: p.description, matchIndex, field, query});
+        if (matchIndex >= 0) results.push({i, title: p.title, description: p.description, info: p.info, matchIndex, field, query});
       });
 
       showResults(results);
@@ -371,14 +367,16 @@
           div.innerHTML = r.title.substring(0, start) + "<mark>" + r.title.substring(start, end) + "</mark>" + r.title.substring(end);
         } else {
           const snippetLength = 40;
+          let textField = r.field === "description" ? r.description : r.info;
           const startIndex = Math.max(0, r.matchIndex - snippetLength);
-          const endIndex = Math.min(r.description.length, r.matchIndex + r.query.length + snippetLength);
+          const endIndex = Math.min(textField.length, r.matchIndex + r.query.length + snippetLength);
           const snippet = (startIndex > 0 ? "…":"") + 
-                          r.description.substring(startIndex, r.matchIndex) + 
-                          "<mark>" + r.description.substring(r.matchIndex, r.matchIndex + r.query.length) + "</mark>" + 
-                          r.description.substring(r.matchIndex + r.query.length, endIndex) +
-                          (endIndex < r.description.length ? "…":"");
-          div.innerHTML = r.title + "<br><small>" + snippet + "</small>";
+                          textField.substring(startIndex, r.matchIndex) + 
+                          "<mark>" + textField.substring(r.matchIndex, r.matchIndex + r.query.length) + "</mark>" + 
+                          textField.substring(r.matchIndex + r.query.length, endIndex) +
+                          (endIndex < textField.length ? "…":"");
+
+          div.innerHTML = r.title + "<br>" + snippet;
         }
 
         div.onclick = () => { 
