@@ -11,7 +11,7 @@
       width: 100%;
       font-family: Arial, sans-serif;
       overflow: hidden;
-      user-select: none; /* prevent text selection */
+      user-select: none;
     }
 
     #container {
@@ -125,10 +125,10 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       width: 220px;
-      max-height: 140px; /* about 5 items */
+      max-height: 140px;
       overflow-y: auto;
       display: none;
-      font-family: Arial, sans-serif; /* same font for all results */
+      font-family: Arial, sans-serif;
       font-size: 14px;
     }
     .results-list div {
@@ -163,243 +163,204 @@
       color: white;
       cursor: pointer;
     }
+    mark {
+      background: yellow;
+      color: black;
+    }
   </style>
 </head>
 <body>
-  <div id="container">
-    <div id="map">
-      <button class="back-button" id="back-start">Terug naar begin</button>
-
-      <!-- Search -->
-      <div class="search-panel">
-        <input type="text" id="search-box" placeholder="Zoek" />
-      </div>
-      <div class="results-list" id="results-list"></div>
-
-      <div class="map-nav">
-        <button id="prev">&#10094;</button>
-        <button id="next">&#10095;</button>
-      </div>
+<div id="container">
+  <div id="map">
+    <button class="back-button" id="back-start">Terug naar begin</button>
+    <div class="search-panel">
+      <input type="text" id="search-box" placeholder="Zoek" />
     </div>
-    <div id="slide-overlay">
-      <div id="slides"></div>
+    <div class="results-list" id="results-list"></div>
+    <div class="map-nav">
+      <button id="prev">&#10094;</button>
+      <button id="next">&#10095;</button>
     </div>
   </div>
-
-  <!-- Lightbox modal -->
-  <div id="photo-modal">
-    <span id="modal-close">&times;</span>
-    <img id="modal-img" src="" />
+  <div id="slide-overlay">
+    <div id="slides"></div>
   </div>
+</div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    // Disable right-click everywhere
-    document.addEventListener('contextmenu', e => e.preventDefault());
+<div id="photo-modal">
+  <span id="modal-close">&times;</span>
+  <img id="modal-img" src="" />
+</div>
 
-    let currentSlide = 0;
-    let slides = [];
-    let markers = [];
-    let map;
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+document.addEventListener('contextmenu', e => e.preventDefault());
 
-    const defaultIcon = L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      shadowSize: [41, 41]
+let currentSlide = 0;
+let slides = [];
+let markers = [];
+let map;
+
+const defaultIcon = L.icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  shadowSize: [41, 41]
+});
+const activeIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  shadowSize: [41, 41]
+});
+
+const startCoords = [51.397546, 5.480413];
+const startZoom = 15;
+
+map = L.map('map', { zoomControl: true }).setView(startCoords, startZoom);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+setTimeout(() => map.invalidateSize(), 200);
+
+fetch('photos.json')
+  .then(res => res.json())
+  .then(data => {
+    slides = data;
+    renderSlides();
+    slides.forEach((p, i) => {
+      if(i === 0) return;
+      const marker = L.marker([p.lat, p.lng], {icon: defaultIcon}).addTo(map);
+      marker.on('click', () => showSlide(i));
+      markers.push(marker);
     });
-    const activeIcon = L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      shadowSize: [41, 41]
-    });
+    showSlide(0, false);
+  });
 
-    const startCoords = [51.397546, 5.480413];
-    const startZoom = 15;
-
-    map = L.map('map', { zoomControl: true }).setView(startCoords, startZoom);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    setTimeout(() => { map.invalidateSize(); }, 200);
-
-    fetch('photos.json')
-      .then(res => res.json())
-      .then(data => {
-        slides = data;
-        renderSlides();
-
-        slides.forEach((p, i) => {
-          if (i === 0) return; // skip first photo marker
-          const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
-          marker.on('click', () => showSlide(i));
-          markers.push(marker);
-        });
-
-        showSlide(0, false);
-      });
-
-    function renderSlides() {
-      const slidesContainer = document.getElementById('slides');
-      slidesContainer.innerHTML = slides.map((p, i) => {
-        let imagesHTML = "";
-        if (p.images) {
-          p.images.forEach(imgObj => {
-            imagesHTML += `<img src="${imgObj.image}" alt="${p.title}" /><p>${imgObj.description}</p>`;
-          });
-        } else {
-          imagesHTML = `<img src="${p.image}" alt="${p.title}" /><p>${p.description}</p>`;
-        }
-        return `<div class="slide" id="slide-${i}"><h2>${p.title}</h2>${imagesHTML}${p.info ? `<p><em>${p.info}</em></p>` : ""}</div>`;
-      }).join('');
+function renderSlides() {
+  const container = document.getElementById('slides');
+  container.innerHTML = slides.map((p,i) => {
+    let imagesHTML = "";
+    if(p.images && p.images.length > 0){
+      imagesHTML = p.images.map(img => `<img src="${img.image}" alt="${p.title}" data-desc="${img.description}" /><p>${img.description}</p>`).join("");
+    } else {
+      imagesHTML = `<img src="${p.image}" alt="${p.title}" /><p>${p.description}</p>`;
     }
+    return `<div class="slide" id="slide-${i}">
+              <h2>${p.title}</h2>
+              ${imagesHTML}
+              ${p.info ? `<p><em>${p.info}</em></p>` : ""}
+            </div>`;
+  }).join('');
+}
 
-    function showSlide(index, moveMap = true) {
-      if (index < 0 || index >= slides.length) return;
-
-      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-      document.getElementById(`slide-${index}`).classList.add('active');
-
-      markers.forEach(m => m.setIcon(defaultIcon));
-      if (index > 0) markers[index - 1].setIcon(activeIcon);
-
-      if (moveMap) {
-        if (index === 0) {
-          map.setView(startCoords, startZoom);
-        } else {
-          const { lat, lng } = slides[index];
-          map.flyTo([lat, lng], 17, { duration: 1.2 });
-        }
-      }
-
-      const modal = document.getElementById('photo-modal');
-      const modalImg = document.getElementById('modal-img');
-      if (modal.style.display === 'flex') {
-        modalImg.src = slides[index].image || (slides[index].images ? slides[index].images[0].image : "");
-      }
-
-      currentSlide = index;
-      updateNav();
+function showSlide(index, moveMap=true){
+  if(index<0 || index>=slides.length) return;
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`slide-${index}`).classList.add('active');
+  markers.forEach(m=>m.setIcon(defaultIcon));
+  if(index>0) markers[index-1].setIcon(activeIcon);
+  if(moveMap){
+    if(index===0) map.setView(startCoords, startZoom);
+    else {
+      const {lat,lng} = slides[index];
+      map.flyTo([lat,lng],17,{duration:1.2});
     }
+  }
+  const modal = document.getElementById('photo-modal');
+  const modalImg = document.getElementById('modal-img');
+  if(modal.style.display==='flex'){
+    modalImg.src = slides[index].image;
+  }
+  currentSlide = index;
+  updateNav();
+}
 
-    function updateNav() {
-      document.getElementById('prev').disabled = currentSlide <= 0;
-      document.getElementById('next').disabled = slides.length === 0 || currentSlide >= slides.length - 1;
+function updateNav(){
+  document.getElementById('prev').disabled = currentSlide<=0;
+  document.getElementById('next').disabled = slides.length===0 || currentSlide>=slides.length-1;
+}
+
+document.getElementById('next').onclick=()=>{if(currentSlide<slides.length-1) showSlide(currentSlide+1);};
+document.getElementById('prev').onclick=()=>{if(currentSlide>0) showSlide(currentSlide-1);};
+document.getElementById('back-start').onclick=()=>{showSlide(0,true);};
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight') document.getElementById('next').click();
+  if(e.key==='ArrowLeft') document.getElementById('prev').click();
+  if(e.key==='Escape'){
+    const modal=document.getElementById('photo-modal');
+    if(modal.style.display==='flex') modal.style.display='none';
+  }
+});
+
+document.addEventListener('click',e=>{
+  if(e.target.tagName==='IMG' && e.target.closest('.slide')){
+    const modal=document.getElementById('photo-modal');
+    const modalImg=document.getElementById('modal-img');
+    modalImg.src=e.target.src;
+    modal.style.display='flex';
+  }
+});
+
+document.getElementById('modal-close').onclick=()=>{document.getElementById('photo-modal').style.display='none';};
+document.getElementById('photo-modal').onclick=(e)=>{if(e.target.id==='photo-modal') e.target.style.display='none';};
+
+// --- Search functionality ---
+const searchBox = document.getElementById('search-box');
+const resultsList = document.getElementById('results-list');
+
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function filterResults(){
+  const query = searchBox.value.trim().toLowerCase();
+  const results = [];
+  if(!query) { resultsList.style.display='none'; return; }
+
+  slides.forEach((p,i)=>{
+    if(i===0) return;
+    let found = false;
+    let textToSearch = p.title + " " + (p.description||"") + " " + (p.info||"");
+    if(p.images && p.images.length>0){
+      textToSearch += " " + p.images.map(img=>img.description).join(" ");
     }
+    if(textToSearch.toLowerCase().includes(query)) found = true;
+    if(found) results.push({i, text:textToSearch, title:p.title});
+  });
+  showResults(results, query);
+}
 
-    document.getElementById('next').onclick = () => { if (currentSlide < slides.length - 1) showSlide(currentSlide + 1); };
-    document.getElementById('prev').onclick = () => { if (currentSlide > 0) showSlide(currentSlide - 1); };
-    document.getElementById('back-start').onclick = () => { showSlide(0, true); };
+function highlight(text, term){
+  const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+  return text.replace(regex,'<mark>$1</mark>');
+}
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') document.getElementById('next').click();
-      if (e.key === 'ArrowLeft') document.getElementById('prev').click();
-      if (e.key === 'Escape') {
-        const modal = document.getElementById('photo-modal');
-        if (modal.style.display === 'flex') modal.style.display = 'none';
-      }
-    });
+function showResults(results, term){
+  resultsList.innerHTML="";
+  if(results.length===0){resultsList.style.display='none'; return;}
+  results.slice(0,5).forEach(r=>{
+    const div=document.createElement('div');
+    div.innerHTML=highlight(r.text, term);
+    div.onclick=()=>{ showSlide(r.i,true); hideResults(); };
+    resultsList.appendChild(div);
+  });
+  resultsList.style.display='block';
+}
 
-    // Photo modal functionality
-    document.addEventListener('click', (e) => {
-      if (e.target.tagName === 'IMG' && e.target.closest('.slide')) {
-        const modal = document.getElementById('photo-modal');
-        const modalImg = document.getElementById('modal-img');
-        modalImg.src = e.target.src;
-        modal.style.display = 'flex';
-      }
-    });
+function hideResults(){resultsList.style.display='none';}
 
-    document.getElementById('modal-close').onclick = () => {
-      document.getElementById('photo-modal').style.display = 'none';
-    };
-
-    document.getElementById('photo-modal').onclick = (e) => {
-      if (e.target.id === 'photo-modal') e.target.style.display = 'none';
-    };
-
-    // Improved Search functionality
-    const searchBox = document.getElementById('search-box');
-    const resultsList = document.getElementById('results-list');
-
-    function filterResults() {
-      const query = searchBox.value.toLowerCase();
-      const results = [];
-
-      slides.forEach((p, i) => {
-        if (i === 0) return;
-
-        let matchIndex = -1;
-        let field = "";
-
-        if (p.title.toLowerCase().includes(query)) {
-          matchIndex = p.title.toLowerCase().indexOf(query);
-          field = "title";
-        } else if (p.description && p.description.toLowerCase().includes(query)) {
-          matchIndex = p.description.toLowerCase().indexOf(query);
-          field = "description";
-        } else if (p.info && p.info.toLowerCase().includes(query)) {
-          matchIndex = p.info.toLowerCase().indexOf(query);
-          field = "info";
-        }
-
-        if (matchIndex >= 0) results.push({i, title: p.title, description: p.description, info: p.info, matchIndex, field, query});
-      });
-
-      showResults(results);
-    }
-
-    function showResults(results) {
-      resultsList.innerHTML = "";
-      if (results.length === 0) { resultsList.style.display = "none"; return; }
-
-      results.slice(0,5).forEach(r => {
-        const div = document.createElement('div');
-
-        if (r.field === "title") {
-          const start = r.title.toLowerCase().indexOf(r.query);
-          const end = start + r.query.length;
-          div.innerHTML = r.title.substring(0, start) + "<mark>" + r.title.substring(start, end) + "</mark>" + r.title.substring(end);
-        } else {
-          const snippetLength = 40;
-          let textField = r.field === "description" ? r.description : r.info;
-          const startIndex = Math.max(0, r.matchIndex - snippetLength);
-          const endIndex = Math.min(textField.length, r.matchIndex + r.query.length + snippetLength);
-          const snippet = (startIndex > 0 ? "…":"") + 
-                          textField.substring(startIndex, r.matchIndex) + 
-                          "<mark>" + textField.substring(r.matchIndex, r.matchIndex + r.query.length) + "</mark>" + 
-                          textField.substring(r.matchIndex + r.query.length, endIndex) +
-                          (endIndex < textField.length ? "…":"");
-
-          div.innerHTML = r.title + "<br>" + snippet;
-        }
-
-        div.onclick = () => { 
-          showSlide(r.i, true); 
-          hideResults(); 
-        };
-        resultsList.appendChild(div);
-      });
-
-      resultsList.style.display = "block";
-    }
-
-    function hideResults() {
-      resultsList.style.display = "none";
-    }
-
-    searchBox.addEventListener('input', filterResults);
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.search-panel') && !e.target.closest('.results-list')) {
-        hideResults();
-      }
-    });
-  </script>
+searchBox.addEventListener('input', filterResults);
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.search-panel') && !e.target.closest('.results-list')){
+    hideResults();
+  }
+});
+</script>
 </body>
 </html>
