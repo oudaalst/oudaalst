@@ -5,178 +5,44 @@
   <title>Oude Aalst-waalre</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    body, html {
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-      user-select: none;
-    }
-
-    #container {
-      display: flex;
-      height: 100vh;
-      width: 100vw;
-    }
-
-    #map {
-      width: 60%;
-      height: 100%;
-      position: relative;
-    }
-
-    #slide-overlay {
-      width: 40%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      overflow-y: auto;
-      padding: 1rem;
-      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
-      position: relative;
-    }
-
-    .slide {
-      display: none;
-    }
-    .slide.active {
-      display: block;
-    }
-
-    .slide img {
-      max-width: 100%;
-      max-height: 50vh;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-      user-drag: none;
-      -webkit-user-drag: none;
-    }
-
-    .map-nav {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 2000;
-    }
-    .map-nav button {
-      background-color: rgba(0,0,0,0.7);
-      color: white;
-      border: none;
-      padding: 10px 14px;
-      font-size: 20px;
-      cursor: pointer;
-      border-radius: 50%;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .map-nav button:hover {
-      background-color: rgba(0,0,0,0.9);
-      transform: scale(1.1);
-    }
-    .map-nav button:disabled {
-      background-color: rgba(0,0,0,0.3);
-      cursor: not-allowed;
-    }
-
-    .back-button {
-      position: absolute;
-      top: 10px;
-      left: 80px; 
-      z-index: 1500;
-      padding: 8px 12px;
-      font-size: 14px;
-      border: none;
-      background-color: rgba(0,0,0,0.8);
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .back-button:hover {
-      background-color: rgba(0,0,0,1);
-      transform: scale(1.05);
-    }
+    body, html { margin:0; height:100%; width:100%; font-family: Arial, sans-serif; overflow:hidden; user-select:none; }
+    #container { display:flex; height:100vh; width:100vw; }
+    #map { width:60%; height:100%; position:relative; }
+    #slide-overlay { width:40%; height:100%; background:rgba(255,255,255,0.95); overflow-y:auto; padding:1rem; box-shadow:-2px 0 10px rgba(0,0,0,0.2); position:relative; }
+    .slide { display:none; }
+    .slide.active { display:block; }
+    .slide img { max-width:100%; max-height:50vh; object-fit:cover; border-radius:8px; margin-bottom:0.5rem; cursor:pointer; user-drag:none; -webkit-user-drag:none; }
+    .map-nav { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:10px; z-index:2000; }
+    .map-nav button { background-color: rgba(0,0,0,0.7); color:white; border:none; padding:10px 14px; font-size:20px; cursor:pointer; border-radius:50%; transition:background-color 0.3s, transform 0.2s; }
+    .map-nav button:hover { background-color: rgba(0,0,0,0.9); transform:scale(1.1); }
+    .map-nav button:disabled { background-color: rgba(0,0,0,0.3); cursor:not-allowed; }
+    .back-button { position:absolute; top:10px; left:80px; z-index:1500; padding:8px 12px; font-size:14px; border:none; background-color: rgba(0,0,0,0.8); color:white; cursor:pointer; border-radius:5px; transition:background-color 0.3s, transform 0.2s; }
+    .back-button:hover { background-color: rgba(0,0,0,1); transform:scale(1.05); }
 
     /* Search box */
-    .search-panel {
-      position: absolute;
-      top: 50px; 
-      left: 80px;
-      z-index: 1500;
-      width: 220px;
-    }
-    .search-panel input {
-      padding: 6px 8px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 100%;
-    }
-    .results-list {
-      position: absolute;
-      top: 85px;
-      left: 80px;
-      z-index: 1600;
-      background: rgba(255,255,255,0.95);
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 220px;
-      max-height: 140px;
-      overflow-y: auto;
-      display: none;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-    }
-    .results-list div {
-      padding: 6px 8px;
-      cursor: pointer;
-    }
-    .results-list div:hover {
-      background: rgba(0,0,0,0.1);
-    }
+    .search-panel { position:absolute; top:50px; left:80px; z-index:1500; width:220px; }
+    .search-panel input { padding:6px 8px; font-size:14px; border:1px solid #ccc; border-radius:4px; width:100%; }
+    .results-list { position:absolute; top:85px; left:80px; z-index:1600; background: rgba(255,255,255,0.95); border:1px solid #ccc; border-radius:4px; width:220px; max-height:140px; overflow-y:auto; display:none; font-family:Arial,sans-serif; font-size:14px; }
+    .results-list div { padding:6px 8px; cursor:pointer; }
+    .results-list div:hover { background: rgba(0,0,0,0.1); }
 
     /* Modal / lightbox for full image */
-    #photo-modal {
-      display: none;
-      position: fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 3000;
-    }
-    #photo-modal img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
-    }
-    #modal-close {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 30px;
-      color: white;
-      cursor: pointer;
-    }
-    mark {
-      background: yellow;
-      color: black;
-    }
+    #photo-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:3000; }
+    #photo-modal img { max-width:90%; max-height:90%; border-radius:8px; }
+    #modal-close { position:absolute; top:20px; right:30px; font-size:30px; color:white; cursor:pointer; }
   </style>
 </head>
 <body>
 <div id="container">
   <div id="map">
     <button class="back-button" id="back-start">Terug naar begin</button>
+
+    <!-- Search -->
     <div class="search-panel">
       <input type="text" id="search-box" placeholder="Zoek" />
     </div>
     <div class="results-list" id="results-list"></div>
+
     <div class="map-nav">
       <button id="prev">&#10094;</button>
       <button id="next">&#10095;</button>
@@ -187,6 +53,7 @@
   </div>
 </div>
 
+<!-- Lightbox modal -->
 <div id="photo-modal">
   <span id="modal-close">&times;</span>
   <img id="modal-img" src="" />
@@ -201,60 +68,41 @@ let slides = [];
 let markers = [];
 let map;
 
-const defaultIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  shadowSize: [41, 41]
-});
-const activeIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  shadowSize: [41, 41]
-});
+const defaultIcon = L.icon({ iconUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png', iconSize:[25,41], iconAnchor:[12,41], popupAnchor:[1,-34], shadowUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png', shadowSize:[41,41]});
+const activeIcon = L.icon({ iconUrl:'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', iconSize:[25,41], iconAnchor:[12,41], popupAnchor:[1,-34], shadowUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png', shadowSize:[41,41]});
 
 const startCoords = [51.397546, 5.480413];
 const startZoom = 15;
 
-map = L.map('map', { zoomControl: true }).setView(startCoords, startZoom);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-setTimeout(() => map.invalidateSize(), 200);
+map = L.map('map', { zoomControl:true }).setView(startCoords, startZoom);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'&copy; OpenStreetMap contributors' }).addTo(map);
+setTimeout(()=>{ map.invalidateSize(); },200);
 
-fetch('photos.json')
-  .then(res => res.json())
-  .then(data => {
-    slides = data;
-    renderSlides();
-    slides.forEach((p, i) => {
-      if(i === 0) return;
-      const marker = L.marker([p.lat, p.lng], {icon: defaultIcon}).addTo(map);
-      marker.on('click', () => showSlide(i));
-      markers.push(marker);
-    });
-    showSlide(0, false);
+fetch('photos.json').then(r=>r.json()).then(data=>{
+  slides = data;
+  renderSlides();
+  slides.forEach((p,i)=>{
+    if(i===0) return;
+    const marker=L.marker([p.lat,p.lng],{icon:defaultIcon}).addTo(map);
+    marker.on('click',()=>showSlide(i));
+    markers.push(marker);
   });
+  showSlide(0,false);
+});
 
-function renderSlides() {
-  const container = document.getElementById('slides');
-  container.innerHTML = slides.map((p,i) => {
-    let imagesHTML = "";
-    if(p.images && p.images.length > 0){
-      imagesHTML = p.images.map(img => `<img src="${img.image}" alt="${p.title}" data-desc="${img.description}" /><p>${img.description}</p>`).join("");
+function renderSlides(){
+  const slidesContainer=document.getElementById('slides');
+  slidesContainer.innerHTML = slides.map((p,i)=>{
+    // handle multiple images
+    let imagesHtml="";
+    if(p.images && p.images.length>0){
+      p.images.forEach(img=>{
+        imagesHtml += `<img src="${img.image}" alt="${p.title}"><p>${img.description}</p>`;
+      });
     } else {
-      imagesHTML = `<img src="${p.image}" alt="${p.title}" /><p>${p.description}</p>`;
+      imagesHtml = `<img src="${p.image}" alt="${p.title}"><p>${p.description}</p>`;
     }
-    return `<div class="slide" id="slide-${i}">
-              <h2>${p.title}</h2>
-              ${imagesHTML}
-              ${p.info ? `<p><em>${p.info}</em></p>` : ""}
-            </div>`;
+    return `<div class="slide" id="slide-${i}"><h2>${p.title}</h2>${imagesHtml}${p.info?`<p><em>${p.info}</em></p>`:""}</div>`;
   }).join('');
 }
 
@@ -265,18 +113,16 @@ function showSlide(index, moveMap=true){
   markers.forEach(m=>m.setIcon(defaultIcon));
   if(index>0) markers[index-1].setIcon(activeIcon);
   if(moveMap){
-    if(index===0) map.setView(startCoords, startZoom);
-    else {
-      const {lat,lng} = slides[index];
-      map.flyTo([lat,lng],17,{duration:1.2});
-    }
+    if(index===0) map.setView(startCoords,startZoom);
+    else { const {lat,lng}=slides[index]; map.flyTo([lat,lng],17,{duration:1.2}); }
   }
-  const modal = document.getElementById('photo-modal');
-  const modalImg = document.getElementById('modal-img');
+  const modal=document.getElementById('photo-modal');
+  const modalImg=document.getElementById('modal-img');
   if(modal.style.display==='flex'){
-    modalImg.src = slides[index].image;
+    if(slides[index].images && slides[index].images.length>0) modalImg.src=slides[index].images[0].image;
+    else modalImg.src=slides[index].image;
   }
-  currentSlide = index;
+  currentSlide=index;
   updateNav();
 }
 
@@ -285,9 +131,9 @@ function updateNav(){
   document.getElementById('next').disabled = slides.length===0 || currentSlide>=slides.length-1;
 }
 
-document.getElementById('next').onclick=()=>{if(currentSlide<slides.length-1) showSlide(currentSlide+1);};
-document.getElementById('prev').onclick=()=>{if(currentSlide>0) showSlide(currentSlide-1);};
-document.getElementById('back-start').onclick=()=>{showSlide(0,true);};
+document.getElementById('next').onclick=()=>{ if(currentSlide<slides.length-1) showSlide(currentSlide+1); };
+document.getElementById('prev').onclick=()=>{ if(currentSlide>0) showSlide(currentSlide-1); };
+document.getElementById('back-start').onclick=()=>{ showSlide(0,true); };
 
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight') document.getElementById('next').click();
@@ -298,6 +144,7 @@ document.addEventListener('keydown',e=>{
   }
 });
 
+// Modal functionality
 document.addEventListener('click',e=>{
   if(e.target.tagName==='IMG' && e.target.closest('.slide')){
     const modal=document.getElementById('photo-modal');
@@ -306,61 +153,62 @@ document.addEventListener('click',e=>{
     modal.style.display='flex';
   }
 });
+document.getElementById('modal-close').onclick=()=>{ document.getElementById('photo-modal').style.display='none'; };
+document.getElementById('photo-modal').onclick=e=>{ if(e.target.id==='photo-modal') e.target.style.display='none'; };
 
-document.getElementById('modal-close').onclick=()=>{document.getElementById('photo-modal').style.display='none';};
-document.getElementById('photo-modal').onclick=(e)=>{if(e.target.id==='photo-modal') e.target.style.display='none';};
-
-// --- Search functionality ---
+// Search functionality
 const searchBox = document.getElementById('search-box');
 const resultsList = document.getElementById('results-list');
 
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function highlight(text, term){
+  const re=new RegExp(`(${term})`,'gi');
+  return text.replace(re,'<mark>$1</mark>');
 }
 
 function filterResults(){
-  const query = searchBox.value.trim().toLowerCase();
-  const results = [];
-  if(!query) { resultsList.style.display='none'; return; }
-
+  const query=searchBox.value.trim().toLowerCase();
+  const results=[];
+  if(!query){ resultsList.style.display='none'; return; }
   slides.forEach((p,i)=>{
     if(i===0) return;
-    let found = false;
-    let textToSearch = p.title + " " + (p.description||"") + " " + (p.info||"");
-    if(p.images && p.images.length>0){
-      textToSearch += " " + p.images.map(img=>img.description).join(" ");
-    }
-    if(textToSearch.toLowerCase().includes(query)) found = true;
-    if(found) results.push({i, text:textToSearch, title:p.title});
+    const texts = [];
+    if(p.title) texts.push({text:p.title, type:'title'});
+    if(p.description) texts.push({text:p.description, type:'desc'});
+    if(p.info) texts.push({text:p.info, type:'info'});
+    if(p.images && p.images.length>0) p.images.forEach(img=>{ if(img.description) texts.push({text:img.description, type:'desc'}); });
+    texts.forEach(t=>{
+      if(t.text.toLowerCase().includes(query)){
+        results.push({i, text:t.text});
+      }
+    });
   });
   showResults(results, query);
 }
 
-function highlight(text, term){
-  const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
-  return text.replace(regex,'<mark>$1</mark>');
-}
-
 function showResults(results, term){
   resultsList.innerHTML="";
-  if(results.length===0){resultsList.style.display='none'; return;}
+  if(results.length===0){ resultsList.style.display='none'; return; }
   results.slice(0,5).forEach(r=>{
     const div=document.createElement('div');
-    div.innerHTML=highlight(r.text, term);
+    const index=r.text.toLowerCase().indexOf(term.toLowerCase());
+    let snippet="";
+    if(index>=0){
+      const start=Math.max(0,index-15);
+      const end=Math.min(r.text.length,index+term.length+15);
+      snippet=r.text.substring(start,end);
+      if(start>0) snippet="…"+snippet;
+      if(end<r.text.length) snippet=snippet+"…";
+    } else snippet=r.text.substring(0,30)+"…";
+    div.innerHTML=highlight(snippet,term);
     div.onclick=()=>{ showSlide(r.i,true); hideResults(); };
     resultsList.appendChild(div);
   });
   resultsList.style.display='block';
 }
 
-function hideResults(){resultsList.style.display='none';}
-
-searchBox.addEventListener('input', filterResults);
-document.addEventListener('click', e=>{
-  if(!e.target.closest('.search-panel') && !e.target.closest('.results-list')){
-    hideResults();
-  }
-});
+function hideResults(){ resultsList.style.display='none'; }
+searchBox.addEventListener('input',filterResults);
+document.addEventListener('click',e=>{ if(!e.target.closest('.search-panel')&&!e.target.closest('.results-list')) hideResults(); });
 </script>
 </body>
 </html>
