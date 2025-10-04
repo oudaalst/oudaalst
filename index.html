@@ -384,14 +384,36 @@
     const resultsList = document.getElementById('results-list');
 
     function filterResults() {
-      const query = searchBox.value.toLowerCase();
-      const results = [];
-      slides.forEach((p, i) => {
-        if (i === 0) return;
-        const matchQuery = !query || p.title.toLowerCase().includes(query) || (p.description && p.description.toLowerCase().includes(query));
-        if (matchQuery) results.push({i, title: p.title});
-      });
-      showResults(results);
+    const query = searchBox.value.toLowerCase();
+    const results = [];
+
+    slides.forEach((p, i) => {
+    if (i === 0) return; // skip first slide if you want
+    let match = false;
+
+    // Check title
+    if (p.title.toLowerCase().includes(query)) match = true;
+
+    // Check main description
+    if (!match && p.description && p.description.toLowerCase().includes(query)) match = true;
+
+    // Check info field
+    if (!match && p.info && p.info.toLowerCase().includes(query)) match = true;
+
+    // Check all images’ descriptions if multiple images
+    if (!match && p.images && Array.isArray(p.images)) {
+      for (const img of p.images) {
+        if (img.description && img.description.toLowerCase().includes(query)) {
+          match = true;
+          break;
+        }
+      }
+    }
+
+    if (match) results.push({i, title: p.title});
+  });
+
+  showResults(results);
     }
 
     function showResults(results) {
