@@ -13,11 +13,11 @@
     "lng": 5.4739738,
     "images": [
     { 
-      "url": "photos/1738_oude_kerk_JdB.jpg",
+      "image": "photos/1738_oude_kerk_JdB.jpg",
       "description": "Schilderij van Jan de Beijer, omstreeks 1738"
     },
     {
-      "url": "photos/1793_oude_kerk_KFB.jpg",
+      "image": "photos/1793_oude_kerk_KFB.jpg",
       "description": "Kopergrave van K.B. Bendorp, omstreeks 1793"
     }
    ],
