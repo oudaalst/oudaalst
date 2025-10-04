@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Oude beelden van de dorpen Aalst en Waalre</title>
+  <title>Oude Aalst-waalre</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     body, html {
@@ -11,7 +11,7 @@
       width: 100%;
       font-family: Arial, sans-serif;
       overflow: hidden;
-      user-select: none; /* prevent text selection */
+      user-select: none;
     }
 
     #container {
@@ -125,7 +125,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       width: 220px;
-      max-height: 140px; /* about 5 items */
+      max-height: 140px; 
       overflow-y: auto;
       display: none;
     }
@@ -147,6 +147,7 @@
       justify-content: center;
       align-items: center;
       z-index: 3000;
+      display: flex;
     }
     #photo-modal img {
       max-width: 90%;
@@ -160,6 +161,33 @@
       font-size: 30px;
       color: white;
       cursor: pointer;
+      z-index: 3100;
+    }
+
+    /* Modal nav buttons */
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.7);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      font-size: 30px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 3100;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .modal-nav:hover {
+      background: rgba(0,0,0,0.9);
+      transform: scale(1.1);
+    }
+    #modal-prev {
+      left: 20px;
+    }
+    #modal-next {
+      right: 20px;
     }
   </style>
 </head>
@@ -168,7 +196,6 @@
     <div id="map">
       <button class="back-button" id="back-start">Terug naar begin</button>
 
-      <!-- Search -->
       <div class="search-panel">
         <input type="text" id="search-box" placeholder="Zoek" />
       </div>
@@ -185,20 +212,23 @@
   </div>
 
   <!-- Lightbox modal -->
-  <div id="photo-modal">
+  <div id="photo-modal" style="display:none;">
     <span id="modal-close">&times;</span>
+    <button class="modal-nav" id="modal-prev">&#10094;</button>
     <img id="modal-img" src="" />
+    <button class="modal-nav" id="modal-next">&#10095;</button>
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    // Disable right-click everywhere
+    // Disable right-click
     document.addEventListener('contextmenu', e => e.preventDefault());
 
     let currentSlide = 0;
     let slides = [];
     let markers = [];
     let map;
+    let modalImageIndex = 0; // current image in modal
 
     const defaultIcon = L.icon({
       iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -233,7 +263,7 @@
         renderSlides();
 
         slides.forEach((p, i) => {
-          if (i === 0) return; // skip first photo marker
+          if (i === 0) return;
           const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
           marker.on('click', () => showSlide(i));
           markers.push(marker);
@@ -244,19 +274,26 @@
 
     function renderSlides() {
       const slidesContainer = document.getElementById('slides');
-      slidesContainer.innerHTML = slides.map((p, i) => `
-        <div class="slide" id="slide-${i}">
-          <h2>${p.title}</h2>
-          <img src="${p.image}" alt="${p.title}" />
-          <p>${p.description}</p>
-          ${p.info ? `<p><em>${p.info}</em></p>` : ""}
-        </div>
-      `).join('');
+      slidesContainer.innerHTML = slides.map((p, i) => {
+        if (p.images) {
+          return `<div class="slide" id="slide-${i}">
+            <h2>${p.title}</h2>
+            ${p.images.map((img, idx) => `<img src="${img.image}" alt="${p.title}" data-index="${idx}" /> <p>${img.description}</p>`).join('')}
+            ${p.info ? `<p><em>${p.info}</em></p>` : ""}
+          </div>`;
+        } else {
+          return `<div class="slide" id="slide-${i}">
+            <h2>${p.title}</h2>
+            <img src="${p.image}" alt="${p.title}" />
+            <p>${p.description}</p>
+            ${p.info ? `<p><em>${p.info}</em></p>` : ""}
+          </div>`;
+        }
+      }).join('');
     }
 
     function showSlide(index, moveMap = true) {
       if (index < 0 || index >= slides.length) return;
-
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       document.getElementById(`slide-${index}`).classList.add('active');
 
@@ -264,19 +301,19 @@
       if (index > 0) markers[index - 1].setIcon(activeIcon);
 
       if (moveMap) {
-        if (index === 0) {
-          map.setView(startCoords, startZoom);
-        } else {
+        if (index === 0) map.setView(startCoords, startZoom);
+        else {
           const { lat, lng } = slides[index];
           map.flyTo([lat, lng], 17, { duration: 1.2 });
         }
       }
 
-      // Update modal image if open
+      // reset modal image index
+      modalImageIndex = 0;
       const modal = document.getElementById('photo-modal');
       const modalImg = document.getElementById('modal-img');
       if (modal.style.display === 'flex') {
-        modalImg.src = slides[index].image;
+        modalImg.src = getCurrentSlideImage();
       }
 
       currentSlide = index;
@@ -292,80 +329,88 @@
     document.getElementById('prev').onclick = () => { if (currentSlide > 0) showSlide(currentSlide - 1); };
     document.getElementById('back-start').onclick = () => { showSlide(0, true); };
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') document.getElementById('next').click();
-      if (e.key === 'ArrowLeft') document.getElementById('prev').click();
-      if (e.key === 'Escape') {
-        const modal = document.getElementById('photo-modal');
-        if (modal.style.display === 'flex') modal.style.display = 'none';
-      }
-    });
+    function getCurrentSlideImage() {
+      const slide = slides[currentSlide];
+      if (slide.images) return slide.images[modalImageIndex].image;
+      return slide.image;
+    }
 
-    // Photo modal functionality
+    function getImagesCount() {
+      const slide = slides[currentSlide];
+      return slide.images ? slide.images.length : 1;
+    }
+
+    const modal = document.getElementById('photo-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalPrev = document.getElementById('modal-prev');
+    const modalNext = document.getElementById('modal-next');
+
     document.addEventListener('click', (e) => {
       if (e.target.tagName === 'IMG' && e.target.closest('.slide')) {
-        const modal = document.getElementById('photo-modal');
-        const modalImg = document.getElementById('modal-img');
-        modalImg.src = e.target.src;
+        const idx = e.target.dataset.index ? parseInt(e.target.dataset.index) : 0;
+        modalImageIndex = idx;
+        modalImg.src = getCurrentSlideImage();
         modal.style.display = 'flex';
       }
     });
 
-    document.getElementById('modal-close').onclick = () => {
-      document.getElementById('photo-modal').style.display = 'none';
-    };
+    document.getElementById('modal-close').onclick = () => { modal.style.display = 'none'; };
 
-    document.getElementById('photo-modal').onclick = (e) => {
-      if (e.target.id === 'photo-modal') e.target.style.display = 'none';
-    };
+    modal.onclick = (e) => { if (e.target.id === 'photo-modal') modal.style.display = 'none'; };
 
-    // Search functionality
+    function showModalImage(offset) {
+      const count = getImagesCount();
+      modalImageIndex = (modalImageIndex + offset + count) % count;
+      modalImg.src = getCurrentSlideImage();
+    }
+
+    modalPrev.onclick = (e) => { e.stopPropagation(); showModalImage(-1); };
+    modalNext.onclick = (e) => { e.stopPropagation(); showModalImage(1); };
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        if (modal.style.display === 'flex') showModalImage(1);
+        else document.getElementById('next').click();
+      }
+      if (e.key === 'ArrowLeft') {
+        if (modal.style.display === 'flex') showModalImage(-1);
+        else document.getElementById('prev').click();
+      }
+      if (e.key === 'Escape') { modal.style.display = 'none'; }
+    });
+
+    // Search
     const searchBox = document.getElementById('search-box');
     const resultsList = document.getElementById('results-list');
 
     function filterResults() {
       const query = searchBox.value.toLowerCase();
       const results = [];
-
       slides.forEach((p, i) => {
         if (i === 0) return;
-        const matchQuery = !query || 
-          p.title.toLowerCase().includes(query) || 
-          (p.description && p.description.toLowerCase().includes(query));
+        const matchQuery = !query || p.title.toLowerCase().includes(query) || (p.description && p.description.toLowerCase().includes(query));
         if (matchQuery) results.push({i, title: p.title});
       });
-
       showResults(results);
     }
 
     function showResults(results) {
       resultsList.innerHTML = "";
       if (results.length === 0) { resultsList.style.display = "none"; return; }
-
       results.slice(0,5).forEach(r => {
         const div = document.createElement('div');
         div.textContent = r.title;
-        div.onclick = () => { 
-          showSlide(r.i, true); 
-          hideResults(); 
-        };
+        div.onclick = () => { showSlide(r.i, true); hideResults(); };
         resultsList.appendChild(div);
       });
-
       resultsList.style.display = "block";
     }
 
-    function hideResults() {
-      resultsList.style.display = "none";
-    }
+    function hideResults() { resultsList.style.display = "none"; }
 
     searchBox.addEventListener('input', filterResults);
-
-    // Hide results when clicking outside
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.search-panel') && !e.target.closest('.results-list')) {
-        hideResults();
-      }
+      if (!e.target.closest('.search-panel') && !e.target.closest('.results-list')) hideResults();
     });
   </script>
 </body>
