@@ -1,24 +1,27 @@
 [
     {
-    "title": "Oude foto's van de dorpen Aalst en Waalre",
+    "title": "Aalst-waalre in oude afbeeldingen en foto's",
     "lat": 51.3968,
     "lng": 5.4745,
-    "image": "photos/Postcard-kiosk.jpg",
-    "info": "Website met oude afbeeldingen en foto's van Aalst/Waalre voorzien van wat tekst en uitleg"
+    "image": "photos/Ansichtkaart_groetenuitAalst.jpg",
+    "description": "Aalst-waalre in oude afbeeldingen en foto's",
+    "info": "Navigeer middels de kaart om oude afbeeldingen en foto's van Aalst-waalre te zien. Via de zoek functie kan je op trefwoorden zoeken b.v. Kerk, of straatnaam."
   },
   {
-    "title": "Oude kerkje Aalst omstreeks 1738",
+    "title": "Oude kerkje Aalst",
     "lat": 51.3963821268539,
     "lng": 5.4739738,
-    "image": "photos/1738_oude_kerk_JdB.jpg",
-    "description": "Schilderij van Jan de Beijer, 1738, oude kerkje van Aalst"
-  },
-  {
-    "title": "Oude kerkje Aalst omstreeks 1793",
-    "lat": 51.3964645,
-    "lng": 5.473997329871212,
-    "image": "photos/1793_oude_kerk_KFB.jpg",
-    "description": "Kopergrave van K.B. Bendorp, 1793, oude kerkje van Aalst"
+    "images": [
+    { 
+      "url": "photos/1738_oude_kerk_JdB.jpg",
+      "description": "Schilderij van Jan de Beijer, omstreeks 1738"
+    },
+    {
+      "url": "photos/1793_oude_kerk_KFB.jpg",
+      "description": "Kopergrave van K.B. Bendorp, omstreeks 1793"
+    }
+   ],
+    "info": "Verschillende afbeeldingen oude kerk Aalst"
   },
   {
     "title": "Kasteel van Waalre omstreeks 1705",
