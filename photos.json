@@ -19,6 +19,18 @@
     {
       "image": "photos/1793_oude_kerk_KFB.jpg",
       "description": "Kopergrave van K.B. Bendorp, omstreeks 1793"
+    },
+     {
+      "image": "photos/kerkje ansicht.jpg",
+      "description": "Ansichtkaart Jan Bijnen, omstreeks 1900"
+    },
+      {
+      "image": "photos/1900_zijkant_kerkje.jpg",
+      "description": "Foto kerkje omstreeks 1900 origineel"
+    },
+      {
+      "image": "photos/1900_zijkant_kerkje.jpg_colorised.jpg",
+      "description": "Foto kerkje omstreeks 1900 ingekleurd met AI-tools"
     }
    ],
     "info": "Verschillende afbeeldingen oude kerk Aalst"
@@ -30,6 +42,22 @@
     "image": "photos/1705_J_Harrewijn_kasteel_waalre.jpg",
     "description": "Kopergravure van Jacobus Harrewijn, 1705, Kasteel van Waalre",
     "info": "De tekening toont het Kasteel van Waalre zoals het er in het begin van de 18e eeuw uitzag.\nHet werk maakt deel uit van de serie Brabantia Illustrata, gepubliceerd door D. van der Daelen in Amsterdam"
+  },
+    {
+    "title": "Hut van Mie Peels, Pils en de Aalsterhut",
+    "lat": 51.3963821268539,
+    "lng": 5.4739738,
+    "images": [
+    { 
+      "image": "photos/kaart_MiePeels.jpg",
+      "description": "Overzicht kaartje situatie"
+    },
+    {
+      "image": "",
+      "description": ""
+    }
+   ],
+    "info": "Verschillende afbeeldingen hut van Mie Peels, Mie Pils en Aalsterhut"
   }
 
 ]
