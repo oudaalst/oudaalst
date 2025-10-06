@@ -11,6 +11,7 @@
     "title": "Oude kerkje Aalst",
     "lat": 51.3963821268539,
     "lng": 5.4739738,
+    "info": "Vermoedelijk was er in Aalst op deze plek eerst een periode met een klein houten kerkje of een kapel, daarna in de 13e of 14e eeuw een grotere houten kerk, en in 15e eeuw werd de stenen kerk gebouwd die in 1906 werd afgebroken",
     "images": [
     { 
       "image": "photos/1738_oude_kerk_JdB.jpg",
@@ -32,8 +33,7 @@
       "image": "photos/1900_zijkant_kerkje_colorised.jpg",
       "description": "Foto kerkje omstreeks 1900 ingekleurd met AI-tools"
     }
-   ],
-    "info": "Verschillende afbeeldingen oude kerk Aalst"
+   ]
   },
   {
     "title": "Kasteel van Waalre omstreeks 1705",
