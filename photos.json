@@ -5,13 +5,13 @@
     "lng": 5.4745,
     "image": "photos/Ansichtkaart_groetenuitAalst.jpg",
     "description": "Aalst-waalre in oude afbeeldingen en foto's",
-    "info": "Navigeer middels de kaart om oude afbeeldingen en foto's van Aalst-waalre te zien. Via de zoek functie kan je op trefwoorden zoeken b.v. Kerk, of straatnaam."
+    "info2": "Navigeer middels de kaart om oude afbeeldingen en foto's van Aalst-waalre te zien. Via de zoek functie kan je op trefwoorden zoeken b.v. Kerk, of straatnaam."
   },
   {
     "title": "Oude kerkje Aalst",
     "lat": 51.3963821268539,
     "lng": 5.4739738,
-    "info": "Vermoedelijk was er in Aalst op deze plek eerst een periode met een klein houten kerkje of een kapel, daarna in de 13e of 14e eeuw een grotere houten kerk, en in 15e eeuw werd de stenen kerk gebouwd die in 1906 werd afgebroken",
+    "info1": "Vermoedelijk was er in Aalst op deze plek eerst een periode met een klein houten kerkje of een kapel, daarna in de 13e of 14e eeuw een grotere houten kerk, en in 15e eeuw werd de stenen kerk gebouwd die in 1906 werd afgebroken",
     "images": [
     { 
       "image": "photos/1738_oude_kerk_JdB.jpg",
@@ -41,7 +41,7 @@
     "lng": 5.436277,
     "image": "photos/1705_J_Harrewijn_kasteel_waalre.jpg",
     "description": "Kopergravure van Jacobus Harrewijn, 1705, Kasteel van Waalre",
-    "info": "De tekening toont het Kasteel van Waalre zoals het er in het begin van de 18e eeuw uitzag.\nHet werk maakt deel uit van de serie Brabantia Illustrata, gepubliceerd door D. van der Daelen in Amsterdam"
+    "info2": "De tekening toont het Kasteel van Waalre zoals het er in het begin van de 18e eeuw uitzag.\nHet werk maakt deel uit van de serie Brabantia Illustrata, gepubliceerd door D. van der Daelen in Amsterdam"
   },
     {
     "title": "Hut van Mie Peels, Pils en de Aalsterhut",
@@ -61,7 +61,7 @@
       "description": "Foto van de ingestorte hut van Mie Peels in 1928"
     }
    ],
-    "info": "Verschillende afbeeldingen hut van Mie Peels, Mie Pils en Aalsterhut"
+    "info2": "Verschillende afbeeldingen hut van Mie Peels, Mie Pils en Aalsterhut"
   }
 
 ]
