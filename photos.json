@@ -47,6 +47,7 @@
     "title": "Hut van Mie Peels, Pils en de Aalsterhut",
     "lat": 51.39060284694716,
     "lng": 5.50501562466455,
+    "info1": "Foto's van de hut",
     "images": [
     { 
       "image": "photos/Kaart_MiePeels.jpg",
@@ -56,14 +57,16 @@
       "image": "photos/Hut_Mie_Peels.jpg",
       "description": "Foto van de hut van Mie Peels voor 1928"
     },
+     {
+      "image": "photos/Hut_Mie_Peels_colorised.jpg",
+      "description": "Foto van de hut van Mie Peels voor 1928 ingekleurd met AI"
+    },
     {
       "image": "photos/1928_Hut_Mie_Peels.jpg",
       "description": "Foto van de ingestorte hut van Mie Peels in 1928"
     }
-   ],
-    "info2": "Verschillende afbeeldingen hut van Mie Peels, Mie Pils en Aalsterhut"
+   ]
   }
-
 ]
 
 
