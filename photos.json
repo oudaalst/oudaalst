@@ -55,15 +55,19 @@
     },
     {
       "image": "photos/Hut_Mie_Peels.jpg",
-      "description": "Foto van de hut van Mie Peels voor 1928"
+      "description": "Foto van de Aalsterhut voor 1928"
     },
      {
       "image": "photos/Hut_Mie_Peels_colorised.jpg",
-      "description": "Foto van de hut van Mie Peels voor 1928 ingekleurd met AI"
+      "description": "Foto van de Aalsterhut voor 1928 ingekleurd met AI"
+    },
+      {
+      "image": "photos/1926_Constant_Nefkens_Hut.jpg",
+      "description": "Ets van Constant Nefkens, rond 1926"
     },
     {
       "image": "photos/1928_Hut_Mie_Peels.jpg",
-      "description": "Foto van de ingestorte hut van Mie Peels in 1928"
+      "description": "Foto van de ingestorte hut in 1928"
     }
    ]
   }
