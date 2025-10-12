@@ -83,10 +83,6 @@
     }
 
     .back-button {
-      position: absolute;
-      top: 10px;
-      left: 80px; 
-      z-index: 1500;
       padding: 8px 12px;
       font-size: 14px;
       border: none;
@@ -183,7 +179,13 @@
 <body>
   <div id="container">
     <div id="map">
-      <button class="back-button" id="back-start">Terug naar begin</button>
+      <!-- Buttons container -->
+      <div style="position: absolute; top: 10px; left: 10px; z-index: 1500; display: flex; gap: 10px;">
+        <a href="https://old-maps-memory.lovable.app/" target="_blank">
+          <button class="back-button">Home</button>
+        </a>
+        <button class="back-button" id="back-start">Reset Map</button>
+      </div>
 
       <div class="search-panel">
         <input type="text" id="search-box" placeholder="Zoek" />
