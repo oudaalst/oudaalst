@@ -101,26 +101,6 @@
       transform: scale(1.05);
     }
 
-    /* Style for the new Startpage button */
-    .startpage-button {
-      position: absolute;
-      top: 10px;
-      left: 200px;
-      z-index: 1500;
-      padding: 8px 12px;
-      font-size: 14px;
-      border: none;
-      background-color: rgba(0,0,0,0.8);
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .startpage-button:hover {
-      background-color: rgba(0,0,0,1);
-      transform: scale(1.05);
-    }
-
     /* Search box */
     .search-panel {
       position: absolute;
@@ -204,10 +184,6 @@
   <div id="container">
     <div id="map">
       <button class="back-button" id="back-start">Terug naar begin</button>
-      <!-- ✅ New Startpage button -->
-      <button class="startpage-button" id="startpage-btn" onclick="window.location.href='https://old-maps-memory.lovable.app/'">
-        Startpage
-      </button>
 
       <div class="search-panel">
         <input type="text" id="search-box" placeholder="Zoek" />
@@ -232,6 +208,239 @@
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <!-- The rest of your JS remains unchanged -->
+  <script>
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    let currentSlide = 0;
+    let currentImageIndex = 0;
+    let slides = [];
+    let markers = [];
+    let map;
+
+    const defaultIcon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+    const activeIcon = L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+
+    const startCoords = [51.39257412298977, 5.476356106601488];
+    const startZoom = 14;
+
+    map = L.map('map', { zoomControl: true }).setView(startCoords, startZoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    setTimeout(() => { map.invalidateSize(); }, 200);
+
+    fetch('photos.json')
+      .then(res => res.json())
+      .then(data => {
+        slides = data;
+        renderSlides();
+
+        slides.forEach((p, i) => {
+          if (i === 0) return;
+          const marker = L.marker([p.lat, p.lng], { icon: defaultIcon }).addTo(map);
+          marker.on('click', () => showSlide(i));
+          markers.push(marker);
+        });
+
+        showSlide(0, false);
+      });
+
+    function renderSlides() {
+      const container = document.getElementById('slides');
+      container.innerHTML = slides.map((p, i) => {
+        let imagesHtml = '';
+        if (p.images && p.images.length) {
+          imagesHtml = p.images.map(img => `
+            <img src="${img.image}" alt="${p.title}" data-desc="${img.description}" />
+            <p>${img.description}</p>
+          `).join('');
+        } else {
+          imagesHtml = `<img src="${p.image}" alt="${p.title}" />
+                        <p>${p.description || ''}</p>`;
+        }
+
+        return `<div class="slide" id="slide-${i}">
+          <h2>${p.title}</h2>
+          ${p.info1 ? `<p><em>${p.info1.replace(/\n/g, "<br>")}</em></p>` : ""}
+          ${imagesHtml}
+          ${p.info2 ? `<p><em>${p.info2.replace(/\n/g, "<br>")}</em></p>` : ""}
+        </div>`;
+      }).join('');
+    }
+
+    function showSlide(index, moveMap = true) {
+      if (index < 0 || index >= slides.length) return;
+      currentSlide = index;
+      currentImageIndex = 0;
+
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      document.getElementById(`slide-${index}`).classList.add('active');
+
+      markers.forEach(m => m.setIcon(defaultIcon));
+      if (index > 0) markers[index - 1].setIcon(activeIcon);
+
+      if (moveMap) {
+        if (index === 0) map.setView(startCoords, startZoom);
+        else map.flyTo([slides[index].lat, slides[index].lng], 17, { duration: 1.2 });
+      }
+
+      updateNav();
+    }
+
+    function updateNav() {
+      document.getElementById('prev').disabled = currentSlide <= 0;
+      document.getElementById('next').disabled = slides.length === 0 || currentSlide >= slides.length - 1;
+    }
+
+    document.getElementById('next').onclick = () => nextSlide();
+    document.getElementById('prev').onclick = () => prevSlide();
+    document.getElementById('back-start').onclick = () => showSlide(0, true);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Modal zoom/pan
+    const modal = document.getElementById('photo-modal');
+    const modalImg = document.getElementById('modal-img');
+    const resetZoomBtn = document.getElementById('reset-zoom');
+    let scale = 1;
+    let pos = {x:0,y:0};
+    let isDragging = false;
+    let startDrag = {x:0,y:0};
+
+    function openModal(img) {
+      modal.style.display = 'flex';
+      modalImg.src = img.src;
+      modalImg.dataset.desc = img.dataset.desc || '';
+      scale = 1; pos = {x:0,y:0}; applyTransform();
+      resetZoomBtn.style.display = 'none';
+    }
+    function closeModal() { modal.style.display = 'none'; }
+    function applyTransform() {
+      modalImg.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${scale})`;
+      resetZoomBtn.style.display = (scale>1) ? 'block' : 'none';
+    }
+
+    modalImg.onwheel = e => {
+      e.preventDefault();
+      const delta = e.deltaY>0 ? -0.2 : 0.2;
+      scale = Math.max(1, Math.min(5, scale + delta));
+      applyTransform();
+    };
+    modalImg.onmousedown = e => {
+      if (scale <= 1) return;
+      isDragging = true;
+      startDrag = {x: e.clientX - pos.x, y: e.clientY - pos.y};
+      modalImg.style.cursor = 'grabbing';
+    };
+    window.onmouseup = () => { isDragging=false; modalImg.style.cursor='grab'; };
+    window.onmousemove = e => {
+      if(!isDragging) return;
+      pos = {x: e.clientX - startDrag.x, y: e.clientY - startDrag.y};
+      applyTransform();
+    };
+    modalImg.ondblclick = () => { scale=1; pos={x:0,y:0}; applyTransform(); };
+    resetZoomBtn.onclick = () => { scale=1; pos={x:0,y:0}; applyTransform(); };
+
+    document.addEventListener('click', e => {
+      if (e.target.tagName==='IMG' && e.target.closest('.slide')) openModal(e.target);
+    });
+    document.getElementById('modal-close').onclick = closeModal;
+    modal.onclick = e => { if(e.target.id==='photo-modal') closeModal(); };
+
+    function nextSlide() {
+      const imgs = document.querySelectorAll(`#slide-${currentSlide} img`);
+      if(currentImageIndex<imgs.length-1) {
+        currentImageIndex++;
+        openModal(imgs[currentImageIndex]);
+      } else if(currentSlide<slides.length-1) {
+        showSlide(currentSlide+1);
+        currentImageIndex=0;
+        const imgs2 = document.querySelectorAll(`#slide-${currentSlide} img`);
+        if(imgs2.length>0) openModal(imgs2[currentImageIndex]);
+      }
+    }
+    function prevSlide() {
+      const imgs = document.querySelectorAll(`#slide-${currentSlide} img`);
+      if(currentImageIndex>0) {
+        currentImageIndex--;
+        openModal(imgs[currentImageIndex]);
+      } else if(currentSlide>0) {
+        showSlide(currentSlide-1);
+        const imgs2 = document.querySelectorAll(`#slide-${currentSlide} img`);
+        currentImageIndex = imgs2.length-1;
+        if(imgs2.length>0) openModal(imgs2[currentImageIndex]);
+      }
+    }
+
+    // Search
+    const searchBox = document.getElementById('search-box');
+    const resultsList = document.getElementById('results-list');
+
+    function filterResults() {
+      const q = searchBox.value.toLowerCase();
+      const results = [];
+
+      slides.forEach((p,i) => {
+        if(i===0) return;
+        let matchedText = '';
+        if(p.title.toLowerCase().includes(q)) matchedText=p.title;
+        else if(p.description && p.description.toLowerCase().includes(q)) matchedText=p.description;
+        else if(p.images) {
+          for(const img of p.images) {
+            if(img.description.toLowerCase().includes(q)) {
+              matchedText=img.description;
+              break;
+            }
+          }
+        }
+        if(matchedText) results.push({i, text: matchedText});
+      });
+
+      showResults(results);
+    }
+
+    function showResults(results) {
+      resultsList.innerHTML='';
+      if(!results.length){ resultsList.style.display='none'; return; }
+
+      results.slice(0,5).forEach(r=>{
+        const div = document.createElement('div');
+        const q=searchBox.value;
+        let txt=r.text;
+        if(q) {
+          const regex=new RegExp(`(${q})`, 'gi');
+          txt = txt.replace(regex,'<mark>$1</mark>');
+        }
+        div.innerHTML=txt;
+        div.onclick=()=>{ showSlide(r.i,true); hideResults(); };
+        resultsList.appendChild(div);
+      });
+      resultsList.style.display='block';
+    }
+
+    function hideResults() { resultsList.style.display='none'; }
+    searchBox.addEventListener('input', filterResults);
+    document.addEventListener('click', e => {
+      if(!e.target.closest('.search-panel') && !e.target.closest('.results-list')) hideResults();
+    });
+  </script>
 </body>
 </html>
