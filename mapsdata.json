@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1540-1522",
+    "year": 1540,
+    "title": "Kaart van Brabant 1540",
+    "description": "Kaart met het westen boven georienteerd. Geen vernoeming van Aalst of Waalre, maar het moet langs de dommel in het rode gebied liggen.",
+    "filename": "maps/1540-1552_small.jpg",
+    "source": {
+      "name": "Brabant Collectie",
+      "link": "https://brabant-collectie.blogspot.com/2011/07/uitgelicht_11.html" 
+    }
+  },
+
+  {
+    "id": "1650",
+    "year": 1650,
+    "title": "Germania Inferior - Gerard de Jode",
+    "description": "Detailkaart met Aalst",
+    "filename": "1650-map.jpg",
+    "source": "Koninklijke Bibliotheek"
+  }
+]
