@@ -2,21 +2,23 @@
   {
     "id": "1540-1522",
     "year": 1540,
-    "title": "Kaart van Brabant 1540",
-    "description": "Kaart met het westen boven georienteerd. Geen vernoeming van Aalst of Waalre, maar het moet langs de dommel in het rode gebied liggen.",
+    "title": "Kaart van Brabant - Heinrich Petri",
+    "description": "Kaart met niet het Noorden maar het westen boven georienteerd. Geen specifieke vernoeming van Aalst of Waalre, deze liggen langs de dommel ongeveer in het rood gemarkeerde gebied.",
     "filename": "maps/1540-1552_small.jpg",
     "source": {
       "name": "Brabant Collectie",
       "link": "https://brabant-collectie.blogspot.com/2011/07/uitgelicht_11.html" 
     }
   },
-
   {
-    "id": "1650",
-    "year": 1650,
-    "title": "Germania Inferior - Gerard de Jode",
-    "description": "Detailkaart met Aalst",
-    "filename": "1650-map.jpg",
-    "source": "Koninklijke Bibliotheek"
-  }
+    "id": "1550",
+    "year": 1550,
+    "title": "Kaart van 'groot' Eindhoven - Jacob van Deventer",
+    "description": "Getekende kaart van Eindhoven, waarschijnlijk de oudst bekende. De dorpen staan er niet op, maar bied wel een mooi overzicht van de situatie van Eindhoven, en ten noorden van Aalst.",
+    "filename": "maps/1550 Jacob_van_Deventer-groot_Eindhoven_small.jpg",
+    "source": {
+      "name": "Eindhoven foto's",
+      "link": "https://www.eindhovenfotos.nl/1/kaart_eindhoven_1560.html"
+    }
 ]
+
