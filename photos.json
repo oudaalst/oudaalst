@@ -43,7 +43,7 @@
     "images": [
       { 
         "image": "photos/Kaart_MiePeels.jpg",
-        "description": "Overzicht kaartje situatie"
+        "description": "Overzicht kaartje situatie 3 panden"
       },
       {
         "image": "photos/Hut_Mie_Peels.jpg",
@@ -51,7 +51,7 @@
       },
       {
         "image": "photos/Hut_Mie_Peels_colorised.jpg",
-        "description": "Foto van de Aalsterhut voor 1928 ingekleurd met AI"
+        "description": "Ingekleurd met AI"
       },
       {
         "image": "photos/1926_Constant_Nefkens_Hut.jpg",
@@ -67,11 +67,11 @@
     "title": "Het slotje van Aalst",
     "lat": 51.411947,
     "lng": 5.463131,
-    "info1": "Foto's van het slotje van Aalst, het slotje lag oop grondgebied van Aalst op het terrein waar nu de High Tech Campus is, exact bij de hoofdingang. In 1972 is het gebied toegevoegd aan Eindhoven",
+    "info1": "Foto's van het slotje van Aalst, het slotje lag op Aalster grondgebied op het terrein waar de huidige High Tech Campus is, exact bij de hoofdingang. In 1972, na aanleg A2, is het gebied toegevoegd aan Eindhoven",
     "images": [
       { 
         "image": "photos/Slotje_1915.jpg",
-        "description": "De enigste bekende foto van het slotje van Aalst uit 1915"
+        "description": "De enig bekende foto van het slotje van Aalst uit 1915"
       },
       { 
         "image": "photos/Slotje_1915_colorised.jpg",
