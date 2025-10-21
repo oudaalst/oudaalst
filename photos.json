@@ -5,27 +5,27 @@
     "lng": 5.4739738,
     "info1": "Vermoedelijk was er in Aalst op deze plek eerst een periode met een klein houten kerkje of een kapel, daarna in de 13e of 14e eeuw een grotere houten kerk, en in 15e eeuw werd de stenen kerk gebouwd die in 1906 werd afgebroken",
     "images": [
-    { 
-      "image": "photos/1738_oude_kerk_JdB.jpg",
-      "description": "Schilderij van Jan de Beijer, omstreeks 1738"
-    },
-    {
-      "image": "photos/1793_oude_kerk_KFB.jpg",
-      "description": "Kopergrave van K.B. Bendorp, omstreeks 1793"
-    },
-     {
-      "image": "photos/kerkje ansicht.jpg",
-      "description": "Ansichtkaart Jan Bijnen, omstreeks 1900"
-    },
+      { 
+        "image": "photos/1738_oude_kerk_JdB.jpg",
+        "description": "Schilderij van Jan de Beijer, omstreeks 1738"
+      },
       {
-      "image": "photos/1900_zijkant_kerkje.jpg",
-      "description": "Foto kerkje omstreeks 1900 origineel"
-    },
+        "image": "photos/1793_oude_kerk_KFB.jpg",
+        "description": "Kopergrave van K.B. Bendorp, omstreeks 1793"
+      },
       {
-      "image": "photos/1900_zijkant_kerkje_colorised.jpg",
-      "description": "Foto kerkje omstreeks 1900 ingekleurd met AI-tools"
-    }
-   ]
+        "image": "photos/kerkje ansicht.jpg",
+        "description": "Ansichtkaart Jan Bijnen, omstreeks 1900"
+      },
+      {
+        "image": "photos/1900_zijkant_kerkje.jpg",
+        "description": "Foto kerkje omstreeks 1900 origineel"
+      },
+      {
+        "image": "photos/1900_zijkant_kerkje_colorised.jpg",
+        "description": "Foto kerkje omstreeks 1900 ingekleurd met AI-tools"
+      }
+    ]
   },
   {
     "title": "Kasteel van Waalre omstreeks 1705",
@@ -35,40 +35,52 @@
     "description": "Kopergravure van Jacobus Harrewijn, 1705, Kasteel van Waalre",
     "info2": "De tekening toont het Kasteel van Waalre zoals het er in het begin van de 18e eeuw uitzag.\nHet werk maakt deel uit van de serie Brabantia Illustrata, gepubliceerd door D. van der Daelen in Amsterdam"
   },
-    {
+  {
     "title": "Hut van Mie Peels, Pils en de Aalsterhut",
     "lat": 51.39060284694716,
     "lng": 5.50501562466455,
     "info1": "Foto's van de hut",
     "images": [
-    { 
-      "image": "photos/Kaart_MiePeels.jpg",
-      "description": "Overzicht kaartje situatie"
-    },
-    {
-      "image": "photos/Hut_Mie_Peels.jpg",
-      "description": "Foto van de Aalsterhut voor 1928"
-    },
-     {
-      "image": "photos/Hut_Mie_Peels_colorised.jpg",
-      "description": "Foto van de Aalsterhut voor 1928 ingekleurd met AI"
-    },
+      { 
+        "image": "photos/Kaart_MiePeels.jpg",
+        "description": "Overzicht kaartje situatie"
+      },
       {
-      "image": "photos/1926_Constant_Nefkens_Hut.jpg",
-      "description": "Ets van Constant Nefkens, rond 1926"
-    },
-    {
-      "image": "photos/1928_Hut_Mie_Peels.jpg",
-      "description": "Foto van de ingestorte hut in 1928"
-    }
-   ]
+        "image": "photos/Hut_Mie_Peels.jpg",
+        "description": "Foto van de Aalsterhut voor 1928"
+      },
+      {
+        "image": "photos/Hut_Mie_Peels_colorised.jpg",
+        "description": "Foto van de Aalsterhut voor 1928 ingekleurd met AI"
+      },
+      {
+        "image": "photos/1926_Constant_Nefkens_Hut.jpg",
+        "description": "Ets van Constant Nefkens, rond 1926"
+      },
+      {
+        "image": "photos/1928_Hut_Mie_Peels.jpg",
+        "description": "Foto van de ingestorte hut in 1928"
+      }
+    ]
+  },
+  {
+    "title": "Het slotje van Aalst",
+    "lat": 51.411947,
+    "lng": 5.463131,
+    "info1": "Foto's van het slotje van Aalst, het slotje lag op het terrein waar nu de High Tech Campus is, exact bij de hoofdingang",
+    "images": [
+      { 
+        "image": "photos/Slotje_1915.jpg",
+        "description": "Foto van het slotje van Aalst uit 1915"
+      },
+      { 
+        "image": "photos/Slotje_1915_colorised.jpg",
+        "description": "Foto van het slotje van Aalst uit 1915 ingekleurd met AI"
+      },
+      { 
+        "image": "photos/Slotje_1927.png",
+        "description": "Het slotje is afgebrand in 1927"
+      }
+    ]
   }
 ]
-
-
-
-
-
-
-
-
