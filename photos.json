@@ -67,15 +67,15 @@
     "title": "Het slotje van Aalst",
     "lat": 51.411947,
     "lng": 5.463131,
-    "info1": "Foto's van het slotje van Aalst, het slotje lag op het terrein waar nu de High Tech Campus is, exact bij de hoofdingang",
+    "info1": "Foto's van het slotje van Aalst, het slotje lag oop grondgebied van Aalst op het terrein waar nu de High Tech Campus is, exact bij de hoofdingang. In 1972 is het gebied toegevoegd aan Eindhoven",
     "images": [
       { 
         "image": "photos/Slotje_1915.jpg",
-        "description": "Foto van het slotje van Aalst uit 1915"
+        "description": "De enigste bekende foto van het slotje van Aalst uit 1915"
       },
       { 
         "image": "photos/Slotje_1915_colorised.jpg",
-        "description": "Foto van het slotje van Aalst uit 1915 ingekleurd met AI"
+        "description": "1915 ingekleurd met AI"
       },
       { 
         "image": "photos/Slotje_1927.png",
