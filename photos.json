@@ -72,10 +72,14 @@
     "lat": 51.411947,
     "lng": 5.463131,
     "info1": "Foto's van het slotje van Aalst, het slotje lag op Aalster grondgebied op het terrein waar de huidige High Tech Campus is, exact bij de hoofdingang. In 1972, na aanleg A2, is het gebied toegevoegd aan Eindhoven",
+    "source": {
+      "name": "Canon van Nederland",
+      "link": "https://www.canonvannederland.nl/nl/page/314761/het-slotje" 
+    },
     "images": [
       { 
         "image": "photos/Slotje_1915.jpg",
-        "description": "De enig bekende foto van het slotje van Aalst uit 1915"
+        "description": "Het slotje van Aalst, foto uit 1915"
       },
       { 
         "image": "photos/Slotje_1915_colorised.jpg",
