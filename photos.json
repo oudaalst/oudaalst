@@ -71,7 +71,7 @@
     "title": "Het slotje van Aalst",
     "lat": 51.411947,
     "lng": 5.463131,
-    "info1": "Foto's van het slotje van Aalst, het slotje lag op Aalster grondgebied op het terrein waar de huidige High Tech Campus is, exact bij de hoofdingang. In 1972, na aanleg A2, is het gebied toegevoegd aan Eindhoven",
+    "info1": "Foto's van het slotje van Aalst, het slotje lag op Aalster grondgebied op het terrein waar de huidige High Tech Campus is, exact bij de hoofdingang. In 1972, na aanleg A2, is het gebied toegevoegd aan Eindhoven. De 1e vermelding van deze plek is reeds in 1403, destijds 'Hoeve de (eerste) Beerwinckel",
     "source": {
       "name": "Canon van Nederland",
       "link": "https://www.canonvannederland.nl/nl/page/314761/het-slotje" 
@@ -88,6 +88,42 @@
       { 
         "image": "photos/Slotje_1927.png",
         "description": "Het slotje is afgebrand in 1927"
+      }
+    ]
+  },
+  {
+    "title": "Hoeve de Vlaas, de achterste Beerwinkel",
+    "lat": 51.4088636,
+    "lng": 5.45937,
+    "info1": "De hoeve lag op Aalster grondgebied op het terrein waar de huidige High Tech Campus is, de hoeve bestaat nog steeds op het terrein van de HTC. In 1972, na aanleg A2, is het gebied toegevoegd aan Eindhoven.",
+    "source": {
+      "name": "Cultuur historische inventarisatie",
+      "link": "https://www.broplan.nl/online_document/images/waalre/structuurvisie/2_cataloguscultuurhistorischeinventarisatie.pdf" 
+    },
+    "images": [
+      { 
+        "image": "photos/Vlaas_1956.png",
+        "description": "Hoeve de Vlaas, foto uit 1956"
+      },
+      { 
+        "image": "photos/Vlaas.png",
+        "description": "Jaartal onbekend"
+      },
+      { 
+        "image": "photos/Vlaas_recent.jpg",
+        "description": "Recente foto van de hoeve, deze bestaat nog steeds"
+      },
+       { 
+        "image": "photos/Vlaas_munten1.png",
+        "description": "De standaard 1926"
+      },
+       { 
+        "image": "photos/Vlaas_munten2.png",
+        "description": "1926"
+      },
+       { 
+        "image": "photos/Vlaas_munten3.png",
+        "description": "1926"
       }
     ]
   }
