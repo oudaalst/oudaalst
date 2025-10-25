@@ -158,7 +158,7 @@
     "lat": 51.395922,
     "lng": 5.4716813,
     "year": [1928,1934,1946,1951,1965,1970,1984,2010],
-    "info1": "De Aalstermolen aan de Raadhuisstraat, gebouwd in 1904, afgebrand in 1934, en weer hersteld in 1936. De molen staat nog fier overeind en is een rijksmonument. Medio 2022 zijn er achter de molen huizen gebouwd en heeft er een archeologisch onderzoek plaatsgevonden, er zijn diverse sporen (zoals schreven) ontdekt omstreeks 7e/8e eeuw, en ook uit de middeleeuwen. Er heeft echter geen eerdere molen gestaan op deze plek. ",
+    "info1": "De Aalstermolen aan de Raadhuisstraat, gebouwd in 1904, afgebrand in 1934, en weer hersteld in 1936. De molen is een rijksmonument. Medio 2022 heeft er rondom archeologisch onderzoek plaatsgevonden, en daarna zijn er huizen gebouwd. Er zijn diverse sporen (zoals scherven) gevonden van omstreeks de 7e/8e eeuw, en ook uit de middeleeuwen. Er heeft echter niet eerder een molen gestaan op deze plek. ",
     "source": {
       "name": "Planviewer Arom",
       "link": "https://www.planviewer.nl/imro/files/NL.IMRO.0866.BP00204-0201/b_NL.IMRO.0866.BP00204-0201_tb7.pdf" 
@@ -186,39 +186,39 @@
       },
       { 
         "image": "photos/1951_molen_frontaal.jpg",
-        "description": "De molen in 1951"
+        "description": "De molen in 1951, de molen is nog vanaf de straat zichtbaar."
       },
       { 
         "image": "photos/1965_aalstermolen.jpg",
-        "description": "De molen in 1965"
+        "description": "De molen in 1965. Er is een winkel voor de molen gebouwd, een dierenspeciaalzaak. Rechts zitten 2 grote deuren welke toegang tot de molen geven voor wagens."
       },
       { 
         "image": "photos/1970_aalstermolen_2.jpg",
-        "description": "Onderhoud aan de molen in 1970"
+        "description": "Foto uit 1970. We zien de winkel 'de aalstermolen', de deuren zijn vervangen door een groot raam. "
       },
       { 
         "image": "photos/1970_aalstermolen_3.jpg",
-        "description": "Onderhoud aan de molen in 1970"
+        "description": "Foto uit 1970, gemaakt vanuit de tuin van Raadhuisstraat 53, rechts ligt de Piet Hein straat."
       },
       { 
         "image": "photos/1970_aalstermolen.jpg",
-        "description": "Onderhoud aan de molen in 1970"
+        "description": "Foto vanuit de tuin gemaakt in 1970"
       },
       { 
         "image": "photos/1984_aalstermolen_2.jpg",
-        "description": "Molen in 1984"
+        "description": "Onderhoud aan de molen in 1984"
       },
       { 
         "image": "photos/1984_aalstermolen_3.jpg",
-        "description": "Molen in 1984"
+        "description": "Onderhoud aan de molen in 1984"
       },
       { 
         "image": "photos/aalstermolen_3.jpg",
-        "description": "Foto van de molen, jaartal onbekend"
+        "description": "Foto gemaakt na 1984, het huis is verbouwd."
       },
       { 
         "image": "photos/aalstermolen_recent.jpg",
-        "description": "Recente foto van molen, jaartal onbekend"
+        "description": "Recente overzicht foto van molen, jaartal onbekend"
       }
     ]
   }
