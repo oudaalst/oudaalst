@@ -152,5 +152,74 @@
         "description": "De kerk rond 1940 ingekleurd met AI"
       }
     ]
+  },
+  {
+    "title": "Aalstermolen",
+    "lat": 51.395922,
+    "lng": 5.4716813,
+    "year": [1928,1934,1946,1951,1965,1970,1984,2010],
+    "info1": "De Aalstermolen aan de Raadhuisstraat, gebouwd in 1904, afgebrand in 1934, en weer hersteld in 1936. De molen staat nog fier overeind en is een rijksmonument. Medio 2022 zijn er achter de molen huizen gebouwd en heeft er een archeologisch onderzoek plaatsgevonden, er zijn diverse sporen (zoals schreven) ontdekt omstreeks 7e/8e eeuw, en ook uit de middeleeuwen. Er heeft echter geen eerdere molen gestaan op deze plek. ",
+    "source": {
+      "name": "Planviewer Arom",
+      "link": "https://www.planviewer.nl/imro/files/NL.IMRO.0866.BP00204-0201/b_NL.IMRO.0866.BP00204-0201_tb7.pdf" 
+    },
+    "images": [
+      { 
+        "image": "photos/1928_molen_frontaal.jpg",
+        "description": "De molen rond 1928"
+      },
+      { 
+        "image": "photos/1928_molen_frontaal_colorised.jpg",
+        "description": "De molen rond 1928, ingekleurd met AI tools"
+      },
+      { 
+        "image": "photos/1934_molen_Brand.jpg",
+        "description": "De molen in brand 1934"
+      },
+      { 
+        "image": "photos/1934_molen_Brand_colorised.jpg",
+        "description": "De molen in brand 1934, ingekleurd"
+      },
+      { 
+        "image": "photos/1946_molen_zw.png",
+        "description": "De molen in 1946"
+      },
+      { 
+        "image": "photos/1951_molen_frontaal.jpg",
+        "description": "De molen in 1951"
+      },
+      { 
+        "image": "photos/1965_aalstermolen.jpg",
+        "description": "De molen in 1965"
+      },
+      { 
+        "image": "photos/1970_aalstermolen_2.jpg",
+        "description": "Onderhoud aan de molen in 1970"
+      },
+      { 
+        "image": "photos/1970_aalstermolen_3.jpg",
+        "description": "Onderhoud aan de molen in 1970"
+      },
+      { 
+        "image": "photos/1970_aalstermolen.jpg",
+        "description": "Onderhoud aan de molen in 1970"
+      },
+      { 
+        "image": "photos/1984_aalstermolen_2.jpg",
+        "description": "Molen in 1984"
+      },
+      { 
+        "image": "photos/1984_aalstermolen_3.jpg",
+        "description": "Molen in 1984"
+      },
+      { 
+        "image": "photos/aalstermolen_3.jpg",
+        "description": "Foto van de molen, jaartal onbekend"
+      },
+      { 
+        "image": "photos/aalstermolen_recent.jpg",
+        "description": "Recente foto van molen, jaartal onbekend"
+      }
+    ]
   }
 ]
