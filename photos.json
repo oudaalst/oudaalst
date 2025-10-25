@@ -165,59 +165,59 @@
     },
     "images": [
       { 
-        "image": "photos/1928_molen_frontaal.jpg",
+        "image": "photos/1928_Molen_Frontaal.jpg",
         "description": "De molen rond 1928"
       },
       { 
-        "image": "photos/1928_molen_frontaal_colorised.jpg",
+        "image": "photos/1928_Molen_Frontaal_Colorised.jpg",
         "description": "De molen rond 1928, ingekleurd met AI tools"
       },
       { 
-        "image": "photos/1934_molen_Brand.jpg",
+        "image": "photos/1934_Molen_Brand.jpg",
         "description": "De molen in brand 1934"
       },
       { 
-        "image": "photos/1934_molen_Brand_colorised.jpg",
+        "image": "photos/1934_Molen_Brand_Colorised.jpg",
         "description": "De molen in brand 1934, ingekleurd"
       },
       { 
-        "image": "photos/1946_molen_zw.png",
+        "image": "photos/1946_Molen_zw.png",
         "description": "De molen in 1946"
       },
       { 
-        "image": "photos/1951_molen_frontaal.jpg",
+        "image": "photos/1951_Molen_Frontaal.jpg",
         "description": "De molen in 1951, de molen is nog vanaf de straat zichtbaar."
       },
       { 
-        "image": "photos/1965_aalstermolen.jpg",
+        "image": "photos/1965_Aalstermolen.jpg",
         "description": "De molen in 1965. Er is een winkel voor de molen gebouwd, een dierenspeciaalzaak. Rechts zitten 2 grote deuren welke toegang tot de molen geven voor wagens."
       },
       { 
-        "image": "photos/1970_aalstermolen_2.jpg",
+        "image": "photos/1970_Aalstermolen_2.jpg",
         "description": "Foto uit 1970. We zien de winkel 'de aalstermolen', de deuren zijn vervangen door een groot raam. "
       },
       { 
-        "image": "photos/1970_aalstermolen_3.jpg",
+        "image": "photos/1970_Aalstermolen_3.jpg",
         "description": "Foto uit 1970, gemaakt vanuit de tuin van Raadhuisstraat 53, rechts ligt de Piet Hein straat."
       },
       { 
-        "image": "photos/1970_aalstermolen.jpg",
+        "image": "photos/1970_Aalstermolen.jpg",
         "description": "Foto vanuit de tuin gemaakt in 1970"
       },
       { 
-        "image": "photos/1984_aalstermolen_2.jpg",
+        "image": "photos/1984_Aalstermolen_2.jpg",
         "description": "Onderhoud aan de molen in 1984"
       },
       { 
-        "image": "photos/1984_aalstermolen_3.jpg",
+        "image": "photos/1984_Aalstermolen_3.jpg",
         "description": "Onderhoud aan de molen in 1984"
       },
       { 
-        "image": "photos/aalstermolen_3.jpg",
+        "image": "photos/Aalstermolen_3.jpg",
         "description": "Foto gemaakt na 1984, het huis is verbouwd."
       },
       { 
-        "image": "photos/aalstermolen_recent.jpg",
+        "image": "photos/Aalstermolen_recent.jpg",
         "description": "Recente overzicht foto van molen, jaartal onbekend"
       }
     ]
