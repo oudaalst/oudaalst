@@ -131,5 +131,26 @@
         "description": "1926"
       }
     ]
+  },
+  {
+    "title": "Oude kerkje van Waalre",
+    "lat": 51.3866031,
+    "lng": 5.4437615,
+    "year": [1940],
+    "info1": "Sint Willibrordus Kerk Waalre. Op deze plek bevond zich reeds rond 712 een houten kerkje. In de 12e eeuw werd op dezelfde plek een nieuwe stenen kerk gebouwd, welke nog steeds de basis voor de huidige kerk vormt",
+    "source": {
+      "name": "",
+      "link": "" 
+    },
+    "images": [
+      { 
+        "image": "photos/1940_wilibrorduskerk.png",
+        "description": "De kerk rond 1940"
+      },
+      { 
+        "image": "photos/1940_wilibrorduskerk_colorised.png",
+        "description": "De kerk rond 1940 ingekleurd met AI"
+      }
+    ]
   }
 ]
